@@ -69,14 +69,14 @@ pm::types::User pm::dal::UserStore::getByEmail(std::string email)
 	return *it;
 }
 
-std::vector<pm::types::User> pm::dal::UserStore::getAll()
+std::vector<pm::types::User> pm::dal::UserStore::get_all()
 {
-	return std::vector<pm::types::User>(users);
+	return std::vector<types::User>(users);
 }
 
-void pm::dal::UserStore::remove(size_t id)
+void pm::dal::UserStore::remove(const size_t id) const
 {
-	for (auto it = users.begin(); it != users.end(); it++)
+	for (auto it = users.begin(); it != users.end(); ++it)
 	{
 		if ((*it).id == id)
 		{
@@ -88,7 +88,7 @@ void pm::dal::UserStore::remove(size_t id)
 	throw std::range_error(std::string("User with id ") + std::to_string(id) + std::string(" was not found!"));
 }
 
-void pm::dal::UserStore::update(pm::types::User user)
+void pm::dal::UserStore::update(const pm::types::User user) const
 {
 	std::vector<pm::types::User>::iterator it;
 	it = std::find_if(users.begin(), users.end(), 

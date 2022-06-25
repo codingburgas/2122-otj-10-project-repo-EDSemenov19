@@ -5,7 +5,7 @@
 
 typedef int (*calc_t)(int, int);
 
-int sum(int a, int b)
+constexpr int sum(const int& a, const int& b)
 {
 	return a + b;
 }
@@ -13,7 +13,7 @@ int sum(int a, int b)
 void main()
 {
 	// With function pointers
-	calc_t calc = sum;
+	int (*calc)(const int& a, const int& b) = sum;
 	int c = calc(5, 6);
 
 	auto sumLambda = [c](int a, int b) { return a + b + c; };

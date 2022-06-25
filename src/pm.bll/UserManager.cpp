@@ -49,7 +49,7 @@ pm::types::User pm::bll::UserManager::loginUser(std::string username, std::strin
 
 std::vector<pm::types::User> pm::bll::UserManager::getRegisteredUsers()
 {
-	auto users = m_userStore.getAll();
+	auto users = m_userStore.get_all();
 	return users;
 }
 

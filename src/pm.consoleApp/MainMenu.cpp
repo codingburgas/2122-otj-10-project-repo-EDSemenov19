@@ -10,29 +10,29 @@ void* MainMenu::handleOption1(void*)
 
 void MainMenu::displayMenu()
 {
+	std::cout << "Main menu! " << std::endl;
 }
 
 void MainMenu::handle()
 {
 	system("cls");
-	char ch;
 
 	do
 	{
 		displayMenu();
-		ch = _getch();
+		char ch = _getch();
 
 		auto it = find_if(items.begin(), items.end(),
-			[&](pm::types::MenuItem item) { return item.key == ch; });
+			[&](const pm::types::MenuItem item) { return item.key == ch; });
 
 		if (it == items.end())
 		{
 			std::cout << "Invalid option!" << std::endl;
 		}
 
-		if ((*it).handler != NULL)
+		if ((*it).handler != nullptr)
 		{
-			(*it).handler(NULL);
+			(*it).handler(nullptr);
 		}
 		else 
 		{
@@ -43,19 +43,14 @@ void MainMenu::handle()
 
 }
 
-/*void* handleOption1(void*)
-{
-
-}
-*/
 
 void initAndShowMainMenu()
 {
 	MainMenu mainMenu;
 
-	//mainMenu.items.push_back({ '1', "Item1", handleOption1 });
-	mainMenu.items.push_back({ '2', "Item2", NULL});
-	mainMenu.items.push_back({ '3', "Item3", NULL});
+	mainMenu.items.push_back({ '1', "Item1",   });
+	mainMenu.items.push_back({ '2', "Item2", nullptr});
+	mainMenu.items.push_back({ '3', "Item3", nullptr});
 
 	mainMenu.handle();
 }

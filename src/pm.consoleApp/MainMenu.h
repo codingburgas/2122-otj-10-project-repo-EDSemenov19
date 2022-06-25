@@ -7,9 +7,10 @@ struct MainMenu
 {
 	std::vector<pm::types::MenuItem> items;
 
-	void* handleOption1(void*);
-	void displayMenu();
+	static void* handleOption1(void*);
+	static void displayMenu();
 	void handle();
+	static void handleOption1();
 };
 
 void initAndShowMainMenu();

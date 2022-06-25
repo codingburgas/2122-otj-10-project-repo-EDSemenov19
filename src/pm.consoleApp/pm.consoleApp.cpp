@@ -51,7 +51,7 @@ int main()
 
     //registerUser();
 
-    userManager.seedDatabase();
+   /* userManager.seedDatabase();
     auto users = userManager.getRegisteredUsers();
 
     listRegisteredUsers();
@@ -59,10 +59,10 @@ int main()
     users[1].firstName = "Foo";
 
     userManager.updateUser(users[1]);
-
+    
     //userManager.removeUser(2);
 
     listRegisteredUsers();
-
+    */
 
 }
