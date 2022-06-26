@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <ios>
 #include "Application.h"
+#include "../../lib/nanodbc/nanodbc.h"
 
 pm::bll::UserManager userManager;
 
@@ -46,6 +47,10 @@ void listRegisteredUsers()
 int main()
 {
     Application app;
+    auto const connstr = NANODBC_TEXT("Driver={SQL Server};Server=(local);Trusted_Connection=Yes;Database=master;"); // an ODBC connection string to your database
+    nanodbc::connection conn(connstr);
+
+
 
     app.run();
 
