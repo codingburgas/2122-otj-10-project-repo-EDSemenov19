@@ -14,5 +14,7 @@ namespace pm::dal
 		static std::vector<pm::types::User> get_all();
 		void remove(size_t id) const;
 		void update(pm::types::User user) const;
+		static nanodbc::result getAllElements(nanodbc::connection& conn);
+		
 	};
 }

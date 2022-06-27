@@ -1,5 +1,6 @@
 #pragma once
 #include "../pm.types/MenuItem.h"
+#include "../../lib/nanodbc/nanodbc.h"
 #include <string>
 #include <vector>
 
@@ -7,10 +8,10 @@ struct MainMenu
 {
 	std::vector<pm::types::MenuItem> items;
 
-	static void* handleOption1(void*);
-	static void displayMenu();
-	void handle();
-	static void handleOption1();
+	 void* handleOption1(void*);
+	 void displayMenu(nanodbc::connection& conn);
+	void handle(nanodbc::connection& conn);
+	 void handleOption1();
 };
 
 void initAndShowMainMenu();

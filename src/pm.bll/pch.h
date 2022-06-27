@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include "../../lib/nanodbc/nanodbc.h"
 
 
 #endif //PCH_H

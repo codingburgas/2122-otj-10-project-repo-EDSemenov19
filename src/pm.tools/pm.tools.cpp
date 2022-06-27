@@ -13,5 +13,3 @@ namespace pm::types
 }
 
 pm::types::Student s;
-
-

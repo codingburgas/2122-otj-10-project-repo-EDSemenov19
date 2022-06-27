@@ -10,5 +10,6 @@
 // add headers that you want to pre-compile here
 #include <string>
 #include <vector>
+#include <ctime>
 
 #endif //PCH_H

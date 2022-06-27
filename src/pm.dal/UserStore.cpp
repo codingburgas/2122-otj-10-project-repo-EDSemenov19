@@ -61,6 +61,8 @@ pm::types::User pm::dal::UserStore::getByEmail(std::string email)
 	auto it = std::find_if(users.begin(), users.end(), 
 		[=](pm::types::User u) { return u.email == email;  });
 
+
+
 	if (it == users.end())
 	{
 		throw std::range_error("User not found!");
@@ -72,6 +74,15 @@ pm::types::User pm::dal::UserStore::getByEmail(std::string email)
 std::vector<pm::types::User> pm::dal::UserStore::get_all()
 {
 	return std::vector<types::User>(users);
+}
+
+nanodbc::result pm::dal::UserStore::getAllElements(nanodbc::connection& conn)
+{
+	nanodbc::result result = execute(conn, NANODBC_TEXT(R"(
+     SELECT*
+     FROM Users)"));
+
+	return result;
 }
 
 void pm::dal::UserStore::remove(const size_t id) const

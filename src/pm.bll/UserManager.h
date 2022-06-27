@@ -7,11 +7,12 @@ namespace pm::bll
 	struct UserManager
 	{
 		pm::dal::UserStore m_userStore;
-		std::string hashString(std::string str);
+		static std::string hashString(const std::string& str);
 
 		void registerUser(std::string firstName, std::string lastName, uint8_t age, 
 			std::string email, std::string password);
-		pm::types::User loginUser(std::string username, std::string password);
+		bool checkForNoUsers(nanodbc::connection& conn) const;
+		pm::types::User loginUser(const std::string& username, std::string& password);
 		std::vector<pm::types::User> getRegisteredUsers();
 
 		void seedDatabase();

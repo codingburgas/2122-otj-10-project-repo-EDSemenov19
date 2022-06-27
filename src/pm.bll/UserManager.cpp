@@ -3,9 +3,9 @@
 #include "../pm.tools/md5.h"
 
 // Simple hashing via md5
-std::string pm::bll::UserManager::hashString(std::string str)
+std::string pm::bll::UserManager::hashString(const std::string& str)
 {
-	return md5(str);
+	return std::string(md5(str));
 
 	std::string newStr(str);
 
@@ -28,21 +28,32 @@ void pm::bll::UserManager::registerUser(std::string firstName,
 	user.lastName = lastName;
 	user.email = email;
 	user.age = age;
-	user.passwordHash = hashString(password);
+	//user.passwordHash = hashString(password);
 	
 	m_userStore.create(user);
 }
 
-pm::types::User pm::bll::UserManager::loginUser(std::string username, std::string password)
+bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn) const
 {
-	auto user = m_userStore.getByEmail(username);
+	return (pm::dal::UserStore::getAllElements( conn)) ? true : false;
+}
+
+pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std::string& password)
+{
+
+	if (checkForNoUsers && username == "admin" && password == "adminpass")
+	{
+		return pm::types::User("admin", "admin", "admin@pm.com", 0, "adminpass", true);
+	}
+
+	pm::types::User user = m_userStore.getByEmail(username);
 
 	std::string passHash = hashString(password);
 
-	if (user.passwordHash != passHash)
+	/*if (user.passwordHash != passHash)
 	{
 		throw std::logic_error("Invalid password!");
-	}
+	}*/
 
 	return user;
 }
