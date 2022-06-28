@@ -56,19 +56,55 @@ pm::types::User pm::dal::UserStore::getById(size_t id)
 	
 }
 
-pm::types::User pm::dal::UserStore::getByEmail(std::string email)
+time_t getTime(nanodbc::timestamp& ts1)
 {
-	auto it = std::find_if(users.begin(), users.end(), 
-		[=](pm::types::User u) { return u.email == email;  });
+	tm time{};
+	time.tm_year = ts1.year - 1900;
+	time.tm_mon = ts1.month - 1;
+	time.tm_mday = ts1.day;
+	time.tm_hour = ts1.hour;
+	time.tm_min = ts1.min;
+	time.tm_sec = ts1.sec;
+
+	const time_t tsRes = mktime(&time);
+
+	return tsRes;
+}
 
 
+pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc::connection& conn)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT("SELECT * FROM users WHERE username = ?"));
+	stmt.bind(0, username.c_str());
+	nanodbc::result result = execute(stmt);
+	const short columns = result.columns();
 
-	if (it == users.end())
+	if (!result)
 	{
 		throw std::range_error("User not found!");
 	}
 
-	return *it;
+	pm::types::User user;
+	
+	{
+		user.id = result.get<size_t>("id");
+		user.firstName = result.get<std::string>("firstName");
+		user.lastName = result.get<std::string>("lastName");
+		user.username = result.get<std::string>("username");
+		user.email = result.get<std::string>("email");
+		user.age = result.get<size_t>("age");
+		user.passwordHash = result.get<std::string>("passwordHash");
+
+		auto createdOnTP = result.get<nanodbc::timestamp>("createdOn");
+		auto lastChangeTP = result.get<nanodbc::timestamp>("lastChange");
+		user.createdOn = getTime(createdOnTP);
+		user.lastChange = getTime(lastChangeTP);
+
+		user.isAdmin = result.get<int>("isAdmin");
+	}
+
+	return user;
 }
 
 std::vector<pm::types::User> pm::dal::UserStore::get_all()

@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "../pm.types/User.h"
+#include "../../lib/nanodbc/nanodbc.h"
 
 namespace pm::dal
 {
@@ -10,7 +11,7 @@ namespace pm::dal
 	{
 		void create(pm::types::User& user);
 		pm::types::User getById(size_t id);
-		pm::types::User getByEmail(std::string email);
+		pm::types::User getByUsername(std::string email, nanodbc::connection& conn);
 		static std::vector<pm::types::User> get_all();
 		void remove(size_t id) const;
 		void update(pm::types::User user) const;

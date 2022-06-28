@@ -12,7 +12,7 @@ namespace pm::bll
 		void registerUser(std::string firstName, std::string lastName, uint8_t age, 
 			std::string email, std::string password);
 		bool checkForNoUsers(nanodbc::connection& conn) const;
-		pm::types::User loginUser(const std::string& username, std::string& password);
+		pm::types::User loginUser(const std::string& username, std::string& password, nanodbc::connection& conn);
 		std::vector<pm::types::User> getRegisteredUsers();
 
 		void seedDatabase();

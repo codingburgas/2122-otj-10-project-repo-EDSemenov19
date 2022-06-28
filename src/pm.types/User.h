@@ -11,9 +11,10 @@ namespace pm::types
 		size_t id{};
 		std::string firstName{};
 		std::string lastName{};
+		std::string username{};
 		std::string email{};
 		short int age{};
-		std::string password{};
+		std::string passwordHash{};
 		time_t createdOn{};
 		time_t lastChange{};
 		bool isAdmin{};
@@ -25,8 +26,10 @@ namespace pm::types
 			lastName(std::move(m_lastName)),
 			email(std::move(m_email)),
 			age(m_age),
-			password(std::move(m_password)),
+			passwordHash(std::move(m_password)),
 			isAdmin(m_isAdmin)
 		{}
+
+
 	};
 }

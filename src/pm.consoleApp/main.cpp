@@ -51,10 +51,10 @@ int main() try
    const std::string connstr = NANODBC_TEXT("Driver={ODBC Driver 17 for SQL Server};Server=PCBURGAS;Database=PMDB;Trusted_Connection=yes;"); // an ODBC connection string to your database
 	nanodbc::connection conn(connstr);
 
-    std::cout << "Connection successful. Driver name: " << conn.driver_name() << std::endl;
-    std::cin.get();
+   // std::cout << "Connection successful. Driver name: " << conn.driver_name() << std::endl;
+   // std::cin.get();
 
-   //app.run(conn);
+   app.run(conn);
 
 
     //registerUser();

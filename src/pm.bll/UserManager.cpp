@@ -6,15 +6,6 @@
 std::string pm::bll::UserManager::hashString(const std::string& str)
 {
 	return std::string(md5(str));
-
-	std::string newStr(str);
-
-	//for (size_t i = 0; i < newStr.size(); i++)
-	//{
-	//	newStr[i] = newStr[i] ^ 15;
-	//}
-
-	//return newStr;
 }
 
 void pm::bll::UserManager::registerUser(std::string firstName, 
@@ -22,13 +13,13 @@ void pm::bll::UserManager::registerUser(std::string firstName,
 	std::string password)
 {
 	pm::types::User user;
-	// TODO: Check password requirements
+	// TODO: Check passwordHash requirements
 
 	user.firstName = firstName;
 	user.lastName = lastName;
 	user.email = email;
 	user.age = age;
-	//user.passwordHash = hashString(password);
+	//user.passwordHash = hashString(passwordHash);
 	
 	m_userStore.create(user);
 }
@@ -38,22 +29,22 @@ bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn) const
 	return (pm::dal::UserStore::getAllElements( conn)) ? true : false;
 }
 
-pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std::string& password)
+pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std::string& password, nanodbc::connection& conn)
 {
 
-	if (checkForNoUsers && username == "admin" && password == "adminpass")
+	if (checkForNoUsers(conn) && username == "admin" && password == "adminpass")
 	{
 		return pm::types::User("admin", "admin", "admin@pm.com", 0, "adminpass", true);
 	}
 
-	pm::types::User user = m_userStore.getByEmail(username);
+	pm::types::User user = m_userStore.getByUsername(username, conn);
 
 	std::string passHash = hashString(password);
 
-	/*if (user.passwordHash != passHash)
+	if (user.passwordHash != passHash)
 	{
-		throw std::logic_error("Invalid password!");
-	}*/
+		throw std::logic_error("Invalid passwordHash!");
+	}
 
 	return user;
 }

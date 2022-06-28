@@ -3,6 +3,7 @@
 #include <iostream>
 #include "../pm.types/User.h"
 #include "../pm.bll/UserManager.h"
+#include "../../lib/nanodbc/nanodbc.h"
 
 
 class Login
@@ -13,5 +14,5 @@ class Login
 	pm::bll::UserManager userManager_;
 public:
 	void printLogin();
-	pm::types::User getUserLogged();
+	pm::types::User getUserLogged(nanodbc::connection conn);
 };
