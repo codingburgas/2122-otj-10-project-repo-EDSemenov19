@@ -5,14 +5,12 @@ void Login::printLogin()
 {
 	std::cout << "Login menu" << std::endl;
 	std::cout <<"Email: ";
-	std::cout << std::endl;
 	getline(std::cin, email);
-	std::cout << std::endl;
 	std::cout <<"Password: ";
 	getline(std::cin, password);
 }
 
-pm::types::User Login::getUserLogged(nanodbc::connection conn)
+pm::types::User Login::getUserLogged(nanodbc::connection& conn)
 {
 	printLogin();
 

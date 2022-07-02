@@ -14,5 +14,5 @@ class Login
 	pm::bll::UserManager userManager_;
 public:
 	void printLogin();
-	pm::types::User getUserLogged(nanodbc::connection conn);
+	pm::types::User getUserLogged(nanodbc::connection& conn);
 };

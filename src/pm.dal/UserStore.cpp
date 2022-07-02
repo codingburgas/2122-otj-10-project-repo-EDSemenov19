@@ -18,19 +18,10 @@ size_t generateNewId()
 	return maxId + 1;
 }
 
-void pm::dal::UserStore::create(pm::types::User& user)
+void pm::dal::UserStore::create(nanodbc::connection& conn, pm::types::User& user)
 {
-	auto it = std::find_if(users.begin(), users.end(),
-		[&](pm::types::User u) { return u.email == user.email; });
-
-	if (it != users.end())
-	{
-		throw std::range_error("The user " + std::string(user.email) + " already exists!");
-	}
-
-	user.id = generateNewId();
-
-	users.push_back(user);
+	system("cls");
+	std::cout << "Creating user..." << std::endl;
 }
 
 pm::types::User pm::dal::UserStore::getById(size_t id)

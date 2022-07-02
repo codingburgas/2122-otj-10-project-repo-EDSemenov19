@@ -6,10 +6,17 @@
 void Application::run(nanodbc::connection& conn)
 {
 	Login login;
-	pm::types::User user = login.getUserLogged(conn);
-
-	std::cout << "Welcome " << user.firstName << "!" << std::endl;
-
 	MainMenu mainMenu;
-	mainMenu.displayMenu(conn);
+	pm::types::User user = login.getUserLogged(conn);
+	
+	if(user.isAdmin)
+	{
+		mainMenu.displayAdminMenu(conn, user);
+	}
+	else
+	{
+		mainMenu.displayUserMenu(conn, user);
+	}
+	
+	//mainMenu.displayMenu(conn, user);
 }

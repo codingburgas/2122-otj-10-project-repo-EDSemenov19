@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include <iostream>
 #include "../pm.types/User.h"
 #include "../../lib/nanodbc/nanodbc.h"
 
@@ -9,7 +10,7 @@ namespace pm::dal
 
 	struct UserStore
 	{
-		void create(pm::types::User& user);
+		static void create(nanodbc::connection& conn, pm::types::User& user);
 		pm::types::User getById(size_t id);
 		pm::types::User getByUsername(std::string email, nanodbc::connection& conn);
 		static std::vector<pm::types::User> get_all();

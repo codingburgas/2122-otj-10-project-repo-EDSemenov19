@@ -158,6 +158,10 @@
     <ClCompile Include="login.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ProjectsManagement.cpp" />
+    <ClCompile Include="TasksManagement.cpp" />
+    <ClCompile Include="TeamsManagement.cpp" />
+    <ClCompile Include="UsersManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\pm.bll\pm.bll.vcxproj">
@@ -172,6 +176,10 @@
     <ClInclude Include="login.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="pm.consoleApp.h" />
+    <ClInclude Include="ProjectsManagement.h" />
+    <ClInclude Include="TasksManagement.h" />
+    <ClInclude Include="TeamsManagement.h" />
+    <ClInclude Include="UsersManagement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,7 +21,7 @@ void pm::bll::UserManager::registerUser(std::string firstName,
 	user.age = age;
 	//user.passwordHash = hashString(passwordHash);
 	
-	m_userStore.create(user);
+	//m_userStore.create(conn, user);
 }
 
 bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn) const
