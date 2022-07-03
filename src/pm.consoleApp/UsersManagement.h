@@ -17,3 +17,4 @@
 void displayUsersManagement(nanodbc::connection& conn, pm::types::User& user);
 //void displayUsers(nanodbc::connection& conn, pm::types::User& user);
 void handleUsersManagement(nanodbc::connection& conn, pm::types::User& user, unsigned short int& option);
+void logout(nanodbc::connection& conn, pm::types::User& user);

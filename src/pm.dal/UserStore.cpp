@@ -92,24 +92,28 @@ time_t getTime(nanodbc::timestamp& ts1)
 pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc::connection& conn)
 {
 	nanodbc::statement stmt(conn);
-	nanodbc::prepare(stmt, NANODBC_TEXT("SELECT * FROM users WHERE username = ?"));
+	nanodbc::prepare(stmt, R"(
+		SELECT * FROM [dbo].[Users]
+		WHERE username = ?)");
 	stmt.bind(0, username.c_str());
 	nanodbc::result result = execute(stmt);
-	const short columns = result.columns();
+	result.next();
 
-	if (!result)
+	if (result.rows() == 0)
 	{
-		throw std::range_error("User not found!");
+		std::cout << "User with the username " << username << " not found" << std::endl;
+		std::cin.get();
+		exit(0);
 	}
 
+
 	pm::types::User user;
-	
 	{
 		user.id = result.get<size_t>("id");
 		user.firstName = result.get<std::string>("firstName");
 		user.lastName = result.get<std::string>("lastName");
 		user.username = result.get<std::string>("username");
-		user.email = result.get<std::string>("email");
+		user.email = result.get<std::string>("email");		
 		user.age = result.get<size_t>("age");
 		user.passwordHash = result.get<std::string>("passwordHash");
 

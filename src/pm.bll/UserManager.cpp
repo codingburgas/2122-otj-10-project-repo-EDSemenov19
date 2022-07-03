@@ -89,7 +89,8 @@ void pm::bll::UserManager::registerUser(std::string firstName,
 
 bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn) const
 {
-	return (pm::dal::UserStore::getAllElements( conn)) ? true : false;
+	nanodbc::result result = pm::dal::UserStore::getAllElements(conn);
+	return (result.rows() == 0) ? false : true;
 }
 
 pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std::string& password, nanodbc::connection& conn)
@@ -100,13 +101,16 @@ pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std
 		return pm::types::User("admin", "admin", "admin@pm.com", 0, "adminpass", true);
 	}
 
+
 	pm::types::User user = m_userStore.getByUsername(username, conn);
 
 	std::string passHash = hashString(password);
 
 	if (user.passwordHash != passHash)
 	{
-		throw std::logic_error("Invalid passwordHash!");
+		std::cout << "Wrong password!" << std::endl;
+		std::cin.get();
+		exit(0);
 	}
 
 	return user;

@@ -65,7 +65,7 @@ void MainMenu::handle(nanodbc::connection& conn, pm::types::User& user, unsigned
 		displayTasksManagement(conn, user);
 		break;
 	case 5:
-		//logout(conn, user);
+		logout(conn, user);
 		break;
 	case 6:
 		break;

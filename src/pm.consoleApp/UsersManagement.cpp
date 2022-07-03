@@ -44,3 +44,11 @@ void handleUsersManagement(nanodbc::connection& conn, pm::types::User& user, uns
 		break;
 	}
 }
+
+void logout(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cin.get();
+	system("cls");
+	Application app;
+	app.run(conn);
+}
