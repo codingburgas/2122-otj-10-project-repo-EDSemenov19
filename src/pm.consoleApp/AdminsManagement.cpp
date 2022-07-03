@@ -1,5 +1,15 @@
 #include "AdminsManagement.h"
 
+void pm::pl::AdminsManagement::displayDeleteMenu(nanodbc::connection& connection, pm::types::User user,
+	pm::types::User userToDelete, char& answer)
+{
+	system("cls");
+	std::cout << "Are you sure you want to delete user " << 
+		userToDelete.username << "? (y/n)" << std::endl;
+
+	std::cin >> answer;
+}
+
 void pm::pl::AdminsManagement::displayEditMenu(nanodbc::connection& conn, pm::types::User user, pm::types::User selectedUser)
 {
 	system("cls");
@@ -89,7 +99,7 @@ void pm::pl::AdminsManagement::handleAdminsManagement(nanodbc::connection& conn,
 		pm::bll::UserManager::editUser(conn, user);
 		break;
 	case 3:
-		//pm::bll::UserManager::deleteUser(conn, user);
+		pm::bll::UserManager::deleteUser(conn, user);
 		break;
 	case 4:
 		pm::bll::UserManager::viewUserDetails(conn, user);
@@ -174,7 +184,7 @@ void pm::pl::AdminsManagement::getNewEmail(pm::types::User& selectedUser)
 std::string pm::pl::AdminsManagement::getNewPassword()
 {
 	system("cls");
-	std::cout<<"Enter your new password: ";
+	std::cout << "Enter your new password: ";
 	std::cin.get();
 	std::string newPassword{};
 	getline(std::cin, newPassword);

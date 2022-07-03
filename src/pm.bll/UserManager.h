@@ -24,7 +24,7 @@ namespace pm::bll {
 
 		void seedDatabase();
 
-		void removeUser(size_t id);
+		static void deleteUser(nanodbc::connection& conn, pm::types::User& user);
 
 		void updateUser(pm::types::User);
 	};

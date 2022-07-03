@@ -131,6 +131,16 @@ pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc:
 	return user;
 }
 
+void pm::dal::UserStore::deleteUser(nanodbc::connection& conn, pm::types::User& user, pm::types::User& userToDelete)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, R"(
+		DELETE FROM [dbo].[Users]
+		WHERE id = ?)");
+	stmt.bind(0, &userToDelete.id);
+	execute(stmt);
+}
+
 nanodbc::result pm::dal::UserStore::getAllElements(nanodbc::connection& conn)
 {
 	nanodbc::result result = execute(conn, NANODBC_TEXT(R"(

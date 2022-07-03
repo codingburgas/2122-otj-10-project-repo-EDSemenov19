@@ -18,6 +18,7 @@ namespace pm::pl
 {
 	struct AdminsManagement
 	{
+		static void displayDeleteMenu(nanodbc::connection& connection, pm::types::User user, pm::types::User userToDelete, char& answer);
 		static void displayEditMenu(nanodbc::connection& conn, pm::types::User, pm::types::User selectedUser);
 		static void displayUserDetails(nanodbc::connection& conn, pm::types::User, pm::types::User selectedUser);
 		static void displayAdminsManagement(nanodbc::connection& conn, pm::types::User& user);

@@ -165,9 +165,32 @@ void pm::bll::UserManager::editAdminStatus(nanodbc::connection& conn, pm::types:
 	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
 }
 
-void pm::bll::UserManager::removeUser(size_t id)
+void pm::bll::UserManager::deleteUser(nanodbc::connection& conn, pm::types::User& user)
 {
-	//m_userStore.deleteUser();
+	system("cls");
+	std::vector<pm::types::User> users = pm::dal::UserStore::getAllUsers(conn, user);
+	pm::pl::AdminsManagement::displayUsers(conn, user, users);
+
+	std::cout << "User id to delete: ";
+	unsigned int option{};
+	std::cin >> option;
+
+	pm::types::User selectedUser = pm::dal::UserStore::getUserById(conn, option);
+
+	char answer{};
+	pm::pl::AdminsManagement::displayDeleteMenu(conn, user, selectedUser, answer);
+
+	if (answer == 'y')
+	{
+		pm::dal::UserStore::deleteUser(conn, user, selectedUser);
+	}
+	else
+	{
+		system("cls");
+		pm::pl::AdminsManagement::displayAdminsManagement(conn, user);
+	}
+
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
 }
 
 void pm::bll::UserManager::updateUser(pm::types::User user)
