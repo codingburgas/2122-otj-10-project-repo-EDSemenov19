@@ -13,13 +13,12 @@ namespace pm::dal
 		static void create(nanodbc::connection& conn, pm::types::User& user, pm::types::User& newUser);
 		static void showUser(nanodbc::connection& conn, pm::types::User& user);
 		bool checkByUsername(nanodbc::connection& conn, std::string username);
-		pm::types::User getById(size_t id);
+		static pm::types::User getUserById(nanodbc::connection& conn, const unsigned short option);
 		pm::types::User getByUsername(std::string email, nanodbc::connection& conn);
-		static std::vector<pm::types::User> get_all();
 		static void deleteUser(nanodbc::connection& conn, pm::types::User& user);
 		void update(pm::types::User user) const;
 		static void getUsersToView(nanodbc::connection& conn, pm::types::User& user);
 		static nanodbc::result getAllElements(nanodbc::connection& conn);
-		static void displayAllUsers(nanodbc::connection& conn, pm::types::User& user, std::vector<pm::types::User>& users);
+		static std::vector<pm::types::User> getAllUsers(nanodbc::connection& conn, pm::types::User& user);
 	};
 }

@@ -1,5 +1,33 @@
 #include "AdminsManagement.h"
 
+void pm::pl::AdminsManagement::displayUserDetails(nanodbc::connection& conn, pm::types::User user, pm::types::User selectedUser)
+{
+	system("cls");
+	std::cout << "User details" << '\n' << '\n';
+	std::cout << "Id: " << user.id << '\n';
+	std::cout << "Name: " << user.firstName << '\n';
+	std::cout << "Surname: " << user.lastName << '\n';
+	std::cout << "username: " << user.username << '\n';
+	std::cout << "Email: " << user.email << '\n';
+	std::cout << "Age: " << user.age << '\n';
+	std::cout << "PasswordHash: " << user.passwordHash << '\n';
+	std::cout << "CreatedOn: " << user.createdOn << '\n';
+	std::cout << "lastChange: " << user.lastChange << '\n';
+	if (user.isAdmin)
+		std::cout << "IsAdmin : Yes" << '\n';
+	else
+		std::cout << "IsAdmin : No" << '\n';
+
+	std::cout << "'\n'Go back? (y/n)" << '\n';
+	char choice;
+	std::cin >> choice;
+
+	if (choice == 'y')
+		displayAdminsManagement(conn, user);
+	else
+		exit(0);
+}
+
 void pm::pl::AdminsManagement::displayAdminsManagement(nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
@@ -8,12 +36,12 @@ void pm::pl::AdminsManagement::displayAdminsManagement(nanodbc::connection& conn
 	std::cout << "3. Delete user" << '\n';
 	std::cout << "4. View User Details" << '\n';
 	std::cout << "5. Sort Users" << '\n';
-	std::cout <<"6. Back" << '\n' << std::flush;
+	std::cout << "6. Back" << '\n' << std::flush;
 
 	std::cout << "Option: ";
 	unsigned short int option{};
 	std::cin >> option;
-	
+
 	pm::pl::AdminsManagement::handleAdminsManagement(conn, user, option);
 }
 
@@ -28,7 +56,7 @@ void pm::pl::AdminsManagement::handleAdminsManagement(nanodbc::connection& conn,
 		//pm::dal::UserStore::update(conn, user);
 		break;
 	case 3:
-		pm::dal::UserStore::deleteUser(conn, user);
+		//pm::dal::UserStore::deleteUser(conn, user);
 		break;
 	case 4:
 		pm::bll::UserManager::viewUserDetails(conn, user);
@@ -45,11 +73,11 @@ void pm::pl::AdminsManagement::handleAdminsManagement(nanodbc::connection& conn,
 	}
 }
 
-void pm::pl::AdminsManagement::displayUser(nanodbc::connection& conn, pm::types::User& userToDisplay, std::vector<pm::types::User>& users)
+void pm::pl::AdminsManagement::displayUsers(nanodbc::connection& conn, pm::types::User& userToDisplay, std::vector<pm::types::User>& users)
 {
 	for (const auto& element : users)
 	{
-		std::cout << element.id << ' ' << element.firstName << ' ' << element.lastName;
+		std::cout << element.id << ". " << element.firstName << ' ' << element.lastName << '\n';
 	}
 }
 

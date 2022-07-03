@@ -23,21 +23,21 @@ void pm::bll::UserManager::registerNewUser(nanodbc::connection& conn, pm::types:
 	bool isAdmin{};
 
 	std::cin.get();
-	std::cout<<"Add User"<<std::endl;
-	std::cout<<"\nEnter First Name: ";
+	std::cout << "Add User" << std::endl;
+	std::cout << "\nEnter First Name: ";
 	std::getline(std::cin, firstName);
-	std::cout<<"\nEnter Last Name: ";
+	std::cout << "\nEnter Last Name: ";
 	std::getline(std::cin, lastName);
 	std::cout << "\nEnter username: ";
 	std::getline(std::cin, username);
 	std::cout << "\nEnter Email: ";
 	std::getline(std::cin, email);
-	std::cout<<"\nEnter Age: ";
+	std::cout << "\nEnter Age: ";
 	std::cin >> age;
 	std::cin.get();
-	std::cout<<"\nEnter Password: ";
+	std::cout << "\nEnter Password: ";
 	std::getline(std::cin, password);
-	std::cout<<"\nIs admin (1 or 0): ";
+	std::cout << "\nIs admin (1 or 0): ";
 	std::cin >> isAdmin;
 
 	pm::types::User newUser{};
@@ -85,19 +85,18 @@ pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std
 	return user;
 }
 
-std::vector<pm::types::User> pm::bll::UserManager::getRegisteredUsers()
-{
-	auto users = m_userStore.get_all();
-	return users;
-}
-
 void pm::bll::UserManager::viewUserDetails(nanodbc::connection& conn, pm::types::User& user)
 {
-	std::vector<pm::types::User> users;
-	std::cout << "Vector created!" << std::endl;
-	std::cin.get();
-	pm::dal::UserStore::displayAllUsers(conn, user, users);
-	pm::pl::AdminsManagement::displayUser(conn, user, users);
+	std::vector<pm::types::User> users = pm::dal::UserStore::getAllUsers(conn, user);
+	pm::pl::AdminsManagement::displayUsers(conn, user, users);
+
+	std::cout << "User id to view: ";
+	unsigned int option{};
+	std::cin >> option;
+
+	pm::types::User selectedUser = pm::dal::UserStore::getUserById(conn, option);
+
+	pm::pl::AdminsManagement::displayUserDetails(conn, user, selectedUser);
 }
 
 void pm::bll::UserManager::removeUser(size_t id)
@@ -105,7 +104,7 @@ void pm::bll::UserManager::removeUser(size_t id)
 	//m_userStore.deleteUser();
 }
 
-void pm::bll::UserManager::updateUser(pm::types::User user) 
+void pm::bll::UserManager::updateUser(pm::types::User user)
 {
 	// TODO: data integrity check;
 	m_userStore.update(user);
