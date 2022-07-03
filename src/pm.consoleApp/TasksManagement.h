@@ -6,4 +6,10 @@
 #include <vector>
 #include <iostream>
 
-void displayTasksManagement(nanodbc::connection& conn, pm::types::User user);
+namespace pm::pl
+{
+	struct TasksManagement
+	{
+		static void displayTasksManagement(nanodbc::connection& conn, pm::types::User user);
+	};
+}

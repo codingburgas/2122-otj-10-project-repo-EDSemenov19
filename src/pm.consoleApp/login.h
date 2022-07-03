@@ -5,14 +5,17 @@
 #include "../pm.bll/UserManager.h"
 #include "../../lib/nanodbc/nanodbc.h"
 
-
-class Login
+namespace pm::pl
 {
-	std::string email{};
-	std::string password{};
+	class Login
+	{
+		std::string email{};
+		std::string password{};
 
-	pm::bll::UserManager userManager_;
-public:
-	void printLogin();
-	pm::types::User getUserLogged(nanodbc::connection& conn);
-};
+		pm::bll::UserManager userManager_;
+	public:
+		void printLogin();
+		static void userLoginFailed();
+		pm::types::User getUserLogged(nanodbc::connection& conn);
+	};
+}

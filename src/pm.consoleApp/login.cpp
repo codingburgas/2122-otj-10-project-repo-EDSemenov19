@@ -1,16 +1,23 @@
 #include "login.h"
 #include "User.h"
 
-void Login::printLogin()
+void pm::pl::Login::printLogin()
 {
 	std::cout << "Login menu" << std::endl;
-	std::cout <<"Email: ";
+	std::cout <<"Username: ";
 	getline(std::cin, email);
 	std::cout <<"Password: ";
 	getline(std::cin, password);
 }
 
-pm::types::User Login::getUserLogged(nanodbc::connection& conn)
+void pm::pl::Login::userLoginFailed()
+{
+	std::cout << "Wrong username or password!" << std::endl;
+	std::cin.get();
+	exit(0);
+}
+
+pm::types::User pm::pl::Login::getUserLogged(nanodbc::connection& conn)
 {
 	printLogin();
 

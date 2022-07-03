@@ -3,7 +3,10 @@
 #include "../pm.bll/UserManager.h"
 #include "../../lib/nanodbc/nanodbc.h"
 
-struct Application
+namespace pm::pl
 {
-	void run(nanodbc::connection& conn);
-};
+	struct Application
+	{
+		void run(nanodbc::connection& conn);
+	};
+}

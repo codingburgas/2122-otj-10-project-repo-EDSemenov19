@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UserManager.h"
-#include "UsersManagement.h"
+#include "AdminsManagement.h"
+#include "MainMenu.h"
 #include "../pm.tools/md5.h"
 
 // Simple hashing via md5
@@ -49,42 +50,8 @@ void pm::bll::UserManager::registerNewUser(nanodbc::connection& conn, pm::types:
 	newUser.isAdmin = isAdmin;
 
 	pm::dal::UserStore::create(conn, user, newUser);
-}
 
-void pm::bll::UserManager::userCreated(nanodbc::connection& conn, pm::types::User& user)
-{
-	std::cout << "User created successfully!" << std::endl;
-	std::cout << "Go back? (y/n)" << std::endl;
-	char option;
-	std::cin >> option;
-
-	if (option == 'y')
-	{
-		system("cls");
-		displayUsersManagement(conn, user);
-	}
-	else
-	{
-		system("cls");
-		exit(0);
-	}
-}
-
-
-void pm::bll::UserManager::registerUser(std::string firstName, 
-	std::string lastName, uint8_t age, std::string email, 
-	std::string password)
-{
-	pm::types::User user;
-	// TODO: Check passwordHash requirements
-
-	user.firstName = firstName;
-	user.lastName = lastName;
-	user.email = email;
-	user.age = age;
-	//user.passwordHash = hashString(passwordHash);
-	
-	//m_userStore.create(conn, user);
+	pm::pl::AdminsManagement::userCreated(conn, user);
 }
 
 bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn) const
@@ -101,6 +68,10 @@ pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std
 		return pm::types::User("admin", "admin", "admin@pm.com", 0, "adminpass", true);
 	}
 
+	if (!m_userStore.checkByUsername(conn, username))
+	{
+		pm::pl::Login::userLoginFailed();
+	}
 
 	pm::types::User user = m_userStore.getByUsername(username, conn);
 
@@ -108,9 +79,7 @@ pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std
 
 	if (user.passwordHash != passHash)
 	{
-		std::cout << "Wrong password!" << std::endl;
-		std::cin.get();
-		exit(0);
+		pm::pl::Login::userLoginFailed();
 	}
 
 	return user;
@@ -122,23 +91,18 @@ std::vector<pm::types::User> pm::bll::UserManager::getRegisteredUsers()
 	return users;
 }
 
-void pm::bll::UserManager::viewUser(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::UserManager::viewUserDetails(nanodbc::connection& conn, pm::types::User& user)
 {
-	std::cout<<"Users: "<<std::endl;
-	//pm::dal::UserStore::displayUsers(conn, user);
-}
-
-void pm::bll::UserManager::seedDatabase()
-{
-	registerUser("fn1", "ln1", 16, "u1@lab.com", "1231");
-	registerUser("fn2", "ln2", 17, "u2@lab.com", "1232");
-	registerUser("fn3", "ln3", 15, "u3@lab.com", "1233");
-	registerUser("fn4", "ln4", 18, "u4@lab.com", "1234");
+	std::vector<pm::types::User> users;
+	std::cout << "Vector created!" << std::endl;
+	std::cin.get();
+	pm::dal::UserStore::displayAllUsers(conn, user, users);
+	pm::pl::AdminsManagement::displayUser(conn, user, users);
 }
 
 void pm::bll::UserManager::removeUser(size_t id)
 {
-	m_userStore.remove(id);
+	//m_userStore.deleteUser();
 }
 
 void pm::bll::UserManager::updateUser(pm::types::User user) 

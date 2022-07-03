@@ -6,4 +6,10 @@
 #include <string>
 #include <vector>
 
-void displayProjectsManagement(nanodbc::connection& conn, pm::types::User user);
+namespace pm::pl
+{
+	struct ProjectsManagement
+	{
+		static void displayProjectsManagement(nanodbc::connection& conn, pm::types::User user);
+	};
+}

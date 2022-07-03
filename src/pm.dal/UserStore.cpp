@@ -38,17 +38,13 @@ void pm::dal::UserStore::create(nanodbc::connection& conn, pm::types::User& user
 	stmt.bind(6, &isAdmin);
 
 	nanodbc::execute(stmt);
-
-	pm::bll::UserManager::userCreated(conn, user);
 }
 
-void pm::dal::UserStore::displayUsers(nanodbc::connection& conn, pm::types::User& user)
+void pm::dal::UserStore::getUsersToView(nanodbc::connection& conn, pm::types::User& user)
 {
-	std::cout << "Displaying users..." << std::endl;
+	nanodbc::statement stmt(conn);
 	//std::cout << user.id << " -> " << foundUser.firstName << ' ' << foundUser.lastName << std::endl;
 }
-
-
 
 pm::types::User pm::dal::UserStore::getById(size_t id)
 {
@@ -70,7 +66,7 @@ pm::types::User pm::dal::UserStore::getById(size_t id)
 		}
 	}*/
 
-	
+
 }
 
 time_t getTime(nanodbc::timestamp& ts1)
@@ -89,6 +85,24 @@ time_t getTime(nanodbc::timestamp& ts1)
 }
 
 
+bool pm::dal::UserStore::checkByUsername(nanodbc::connection& conn, std::string username)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, R"(
+		SELECT * FROM [dbo].[Users]
+		WHERE username = ?)");
+	stmt.bind(0, username.c_str());
+	nanodbc::result result = execute(stmt);
+	result.next();
+
+	if (result.rows() == 0)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc::connection& conn)
 {
 	nanodbc::statement stmt(conn);
@@ -101,11 +115,8 @@ pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc:
 
 	if (result.rows() == 0)
 	{
-		std::cout << "User with the username " << username << " not found" << std::endl;
-		std::cin.get();
-		exit(0);
+		throw std::range_error(std::string("Incorrect username or password!"));
 	}
-
 
 	pm::types::User user;
 	{
@@ -113,7 +124,7 @@ pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc:
 		user.firstName = result.get<std::string>("firstName");
 		user.lastName = result.get<std::string>("lastName");
 		user.username = result.get<std::string>("username");
-		user.email = result.get<std::string>("email");		
+		user.email = result.get<std::string>("email");
 		user.age = result.get<size_t>("age");
 		user.passwordHash = result.get<std::string>("passwordHash");
 
@@ -142,8 +153,9 @@ nanodbc::result pm::dal::UserStore::getAllElements(nanodbc::connection& conn)
 	return result;
 }
 
-void pm::dal::UserStore::remove(const size_t id) const
+void pm::dal::UserStore::deleteUser(nanodbc::connection& conn, pm::types::User& user)
 {
+	size_t id{};
 	for (auto it = users.begin(); it != users.end(); ++it)
 	{
 		if ((*it).id == id)
@@ -156,16 +168,48 @@ void pm::dal::UserStore::remove(const size_t id) const
 	throw std::range_error(std::string("User with id ") + std::to_string(id) + std::string(" was not found!"));
 }
 
+void pm::dal::UserStore::displayAllUsers(nanodbc::connection& conn, pm::types::User& user, std::vector<pm::types::User>& users)
+{
+	nanodbc::statement statement(conn);
+	nanodbc::prepare(statement, NANODBC_TEXT(R"(
+    SELECT *
+    FROM Users
+    )"));
+
+	auto result = execute(statement);
+
+	while (result.next())
+	{
+		pm::types::User foundUser;
+		foundUser.id = result.get<int>("Id");
+		foundUser.firstName = result.get<nanodbc::string>("furstName", "");
+		foundUser.lastName = result.get<nanodbc::string>("lastName", "");
+		foundUser.username = result.get<nanodbc::string>("username", "");
+		foundUser.email = result.get<nanodbc::string>("email", "");
+		foundUser.age = result.get<int>("age");
+		foundUser.passwordHash = result.get<nanodbc::string>("passwordHash", "");
+
+		auto createdOnTP = result.get<nanodbc::timestamp>("createdOn");
+		auto lastChangeTP = result.get<nanodbc::timestamp>("lastChange");
+		user.createdOn = getTime(createdOnTP);
+		user.lastChange = getTime(lastChangeTP);
+
+		foundUser.isAdmin = result.get<int>("isAdmin");
+
+		users.push_back(user);
+	}
+}
+
 void pm::dal::UserStore::update(const pm::types::User user) const
 {
 	std::vector<pm::types::User>::iterator it;
-	it = std::find_if(users.begin(), users.end(), 
+	it = std::find_if(users.begin(), users.end(),
 		[&](pm::types::User u) { return u.id == user.id; });
-	
-	if (it == users.end()) 
+
+	if (it == users.end())
 	{
-		throw std::range_error("User with id " 
-			+ std::to_string(user.id) 
+		throw std::range_error("User with id "
+			+ std::to_string(user.id)
 			+ " was not found!");
 	}
 

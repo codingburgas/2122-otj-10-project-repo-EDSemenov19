@@ -3,9 +3,9 @@
 #include "User.h"
 #include "login.h"
 
-void Application::run(nanodbc::connection& conn)
+void pm::pl::Application::run(nanodbc::connection& conn)
 {
-	Login login;
+	pm::pl::Login login;
 	pm::types::User user = login.getUserLogged(conn);
 	
 	if(user.isAdmin)

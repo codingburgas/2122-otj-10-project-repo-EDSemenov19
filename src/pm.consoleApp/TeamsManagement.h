@@ -6,4 +6,10 @@
 #include <iostream>
 #include <vector>
 
-void displayTeamsManagement(nanodbc::connection& conn, pm::types::User user);
+namespace pm::pl
+{
+	struct TeamsManagement
+	{
+		static void displayTeamsManagement(nanodbc::connection& conn, pm::types::User user);
+	};
+}

@@ -27,7 +27,7 @@
     <ClCompile Include="login.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UsersManagement.cpp">
+    <ClCompile Include="AdminsManagement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TeamsManagement.cpp">
@@ -62,7 +62,7 @@
     <ClInclude Include="TeamsManagement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UsersManagement.h">
+    <ClInclude Include="AdminsManagement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
