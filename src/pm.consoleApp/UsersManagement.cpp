@@ -17,12 +17,12 @@ void displayUsersManagement(nanodbc::connection& conn, pm::types::User& user)
 	handleUsersManagement(conn, user, option);
 }
 
-void handleUsersManagement(nanodbc::connection& conn, pm::types::User& user, unsigned short& option)
+void handleUsersManagement(nanodbc::connection& conn, pm::types::User& user, unsigned short int& option)
 {
 	switch (option)
 	{
 	case 1:
-		pm::dal::UserStore::create(conn, user);
+		pm::bll::UserManager::registerNewUser(conn, user);
 		break;
 	case 2:
 		//pm::dal::UserStore::update(conn, user);
@@ -31,7 +31,7 @@ void handleUsersManagement(nanodbc::connection& conn, pm::types::User& user, uns
 		//pm::dal::UserStore::remove(conn, user);
 		break;
 	case 4:
-		//pm::dal::UserStore::getAllElements(conn, user);
+		pm::bll::UserManager::viewUser(conn, user);
 		break;
 	case 5:
 		//pm::dal::UserStore::sort(conn, user);

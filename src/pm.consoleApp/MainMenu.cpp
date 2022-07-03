@@ -48,7 +48,7 @@ void MainMenu::displayUserMenu(nanodbc::connection& conn, pm::types::User& user)
 }
 
 
-void MainMenu::handle(nanodbc::connection& conn, pm::types::User& user, unsigned short option)
+void MainMenu::handle(nanodbc::connection& conn, pm::types::User& user, unsigned short int option)
 {
 	switch (option)
 	{

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "UserStore.h"
+#include "UserManager.h"
 
 std::vector<pm::types::User> users;
 
@@ -18,11 +19,36 @@ size_t generateNewId()
 	return maxId + 1;
 }
 
-void pm::dal::UserStore::create(nanodbc::connection& conn, pm::types::User& user)
+void pm::dal::UserStore::create(nanodbc::connection& conn, pm::types::User& user, pm::types::User& newUser)
 {
-	system("cls");
-	std::cout << "Creating user..." << std::endl;
+	int isAdmin = newUser.isAdmin;
+
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+	INSERT INTO [dbo].[Users] (firstName, lastName, username, email, age, passwordHash, createdOn, lastChange, isAdmin) 
+	VALUES 
+	(?, ?, ?, ?, ?, ?, GETDATE(), GETDATE(), ?))"));
+
+	stmt.bind(0, newUser.firstName.c_str());
+	stmt.bind(1, newUser.lastName.c_str());
+	stmt.bind(2, newUser.username.c_str());
+	stmt.bind(3, newUser.email.c_str());
+	stmt.bind(4, &newUser.age);
+	stmt.bind(5, newUser.passwordHash.c_str());
+	stmt.bind(6, &isAdmin);
+
+	nanodbc::execute(stmt);
+
+	pm::bll::UserManager::userCreated(conn, user);
 }
+
+void pm::dal::UserStore::displayUsers(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Displaying users..." << std::endl;
+	//std::cout << user.id << " -> " << foundUser.firstName << ' ' << foundUser.lastName << std::endl;
+}
+
+
 
 pm::types::User pm::dal::UserStore::getById(size_t id)
 {
