@@ -174,6 +174,100 @@ std::vector<pm::types::User> pm::dal::UserStore::getAllUsers(nanodbc::connection
 	return users;
 }
 
+void pm::dal::UserStore::updateFirstName(nanodbc::connection& conn, pm::types::User& user,
+	pm::types::User& selectedUser)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Users]
+		SET firstName = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, selectedUser.firstName.c_str());
+	stmt.bind(1, &selectedUser.id);
+
+	execute(stmt);
+}
+
+void pm::dal::UserStore::updateLastName(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Users]
+		SET lastName = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, selectedUser.lastName.c_str());
+	stmt.bind(1, &selectedUser.id);
+
+	execute(stmt);
+}
+
+void pm::dal::UserStore::updateUsername(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Users]
+		SET username = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, selectedUser.username.c_str());
+	stmt.bind(1, &selectedUser.id);
+
+	execute(stmt);
+}
+
+void pm::dal::UserStore::updateEmail(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Users]
+		SET email = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, selectedUser.email.c_str());
+	stmt.bind(1, &selectedUser.id);
+
+	execute(stmt);
+}
+
+void pm::dal::UserStore::updatePassword(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Users]
+		SET passwordHash = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, selectedUser.passwordHash.c_str());
+	stmt.bind(1, &selectedUser.id);
+
+	execute(stmt);
+}
+
+void pm::dal::UserStore::updateAge(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Users]
+		SET age = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, &selectedUser.age);
+	stmt.bind(1, &selectedUser.id);
+
+	execute(stmt);
+}
+
+void pm::dal::UserStore::updateAdminStatus(nanodbc::connection& conn, pm::types::User& user,
+	pm::types::User& selectedUser)
+{
+	int isAdmin = selectedUser.isAdmin;
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Users]
+		SET isAdmin = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, &isAdmin);
+	stmt.bind(1, &selectedUser.id);
+
+	execute(stmt);
+}
+
 void pm::dal::UserStore::update(const pm::types::User user) const
 {
 

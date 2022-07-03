@@ -20,5 +20,13 @@ namespace pm::dal
 		static void getUsersToView(nanodbc::connection& conn, pm::types::User& user);
 		static nanodbc::result getAllElements(nanodbc::connection& conn);
 		static std::vector<pm::types::User> getAllUsers(nanodbc::connection& conn, pm::types::User& user);
+
+		static void updateFirstName(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
+		static void updateLastName(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
+		static void updateUsername(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
+		static void updateEmail(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
+		static void updatePassword(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
+		static void updateAge(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
+		static void updateAdminStatus(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
 	};
 }

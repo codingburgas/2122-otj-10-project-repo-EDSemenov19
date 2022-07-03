@@ -18,6 +18,7 @@ namespace pm::pl
 {
 	struct AdminsManagement
 	{
+		static void displayEditMenu(nanodbc::connection& conn, pm::types::User, pm::types::User selectedUser);
 		static void displayUserDetails(nanodbc::connection& conn, pm::types::User, pm::types::User selectedUser);
 		static void displayAdminsManagement(nanodbc::connection& conn, pm::types::User& user);
 		//void getUsersToView(nanodbc::connection& conn, pm::types::User& user);
@@ -25,5 +26,15 @@ namespace pm::pl
 		static void logout(nanodbc::connection& conn, pm::types::User& user);
 		static void displayUsers(nanodbc::connection& conn, pm::types::User& userToDisplay, std::vector<pm::types::User>& users);
 		static void userCreated(nanodbc::connection& conn, pm::types::User& user);
+		static void editMenuHandler(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser, const unsigned short& option);
+
+		static void getNewFirstName(pm::types::User& selectedUser);
+		static void getNewLastName(pm::types::User& selectedUser);
+		static void getNewUsername(pm::types::User& selectedUser);
+		static void getNewEmail(pm::types::User& selectedUser);
+		static std::string getNewPassword();
+		static void getNewAge(pm::types::User& selectedUser);
+		static void getNewAdminStatus(pm::types::User& selectedUser);
+		static void updatedSuccessfully(nanodbc::connection& conn, pm::types::User& user);
 	};
 }

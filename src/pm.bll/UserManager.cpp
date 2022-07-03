@@ -87,9 +87,9 @@ pm::types::User pm::bll::UserManager::loginUser(const std::string& username, std
 
 void pm::bll::UserManager::viewUserDetails(nanodbc::connection& conn, pm::types::User& user)
 {
+	system("cls");
 	std::vector<pm::types::User> users = pm::dal::UserStore::getAllUsers(conn, user);
 	pm::pl::AdminsManagement::displayUsers(conn, user, users);
-
 	std::cout << "User id to view: ";
 	unsigned int option{};
 	std::cin >> option;
@@ -97,6 +97,72 @@ void pm::bll::UserManager::viewUserDetails(nanodbc::connection& conn, pm::types:
 	pm::types::User selectedUser = pm::dal::UserStore::getUserById(conn, option);
 
 	pm::pl::AdminsManagement::displayUserDetails(conn, user, selectedUser);
+}
+
+void pm::bll::UserManager::editUser(nanodbc::connection& conn, pm::types::User& user)
+{
+	system("cls");
+	std::vector<pm::types::User> users = pm::dal::UserStore::getAllUsers(conn, user);
+	pm::pl::AdminsManagement::displayUsers(conn, user, users);
+
+	std::cout << "User id to edit: ";
+	unsigned int option{};
+	std::cin >> option;
+
+	pm::types::User selectedUser = pm::dal::UserStore::getUserById(conn, option);
+
+	pm::pl::AdminsManagement::displayEditMenu(conn, user, selectedUser);
+}
+
+void pm::bll::UserManager::editName(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	pm::pl::AdminsManagement::getNewFirstName(selectedUser);
+	pm::dal::UserStore::updateFirstName(conn, user, selectedUser);
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
+}
+
+void pm::bll::UserManager::editSurname(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	pm::pl::AdminsManagement::getNewLastName(selectedUser);
+	pm::dal::UserStore::updateLastName(conn, user, selectedUser);
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
+}
+
+void pm::bll::UserManager::editUsername(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	pm::pl::AdminsManagement::getNewUsername(selectedUser);
+	pm::dal::UserStore::updateUsername(conn, user, selectedUser);
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
+}
+
+void pm::bll::UserManager::editEmail(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	pm::pl::AdminsManagement::getNewEmail(selectedUser);
+	pm::dal::UserStore::updateEmail(conn, user, selectedUser);
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
+}
+
+void pm::bll::UserManager::editPassword(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	const std::string newPassword = hashString(pm::pl::AdminsManagement::getNewPassword());
+	selectedUser.passwordHash = newPassword;
+	pm::dal::UserStore::updatePassword(conn, user, selectedUser);
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
+}
+
+void pm::bll::UserManager::editAge(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
+{
+	pm::pl::AdminsManagement::getNewAge(selectedUser);
+	pm::dal::UserStore::updateAge(conn, user, selectedUser);
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
+}
+
+void pm::bll::UserManager::editAdminStatus(nanodbc::connection& conn, pm::types::User& user,
+	pm::types::User& selectedUser)
+{
+	pm::pl::AdminsManagement::getNewAdminStatus(selectedUser);
+	pm::dal::UserStore::updateAdminStatus(conn, user, selectedUser);
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
 }
 
 void pm::bll::UserManager::removeUser(size_t id)
