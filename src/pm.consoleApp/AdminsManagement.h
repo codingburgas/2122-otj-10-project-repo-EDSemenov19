@@ -4,6 +4,7 @@
 #include "../pm.bll/UserManager.h"
 #include "../pm.consoleApp/MainMenu.h"
 #include <iostream>
+#include "../../lib/tabulate/tabulate.hpp"
 #include "../../lib/nanodbc/nanodbc.h"
 #include "MainMenu.h"
 #include "login.h"
