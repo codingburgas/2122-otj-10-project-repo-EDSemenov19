@@ -21,6 +21,9 @@
     <ClInclude Include="UserStore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TeamStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pm.dal.cpp">
@@ -30,6 +33,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UserStore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TeamStore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

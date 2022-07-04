@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="MenuItem.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Team.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>

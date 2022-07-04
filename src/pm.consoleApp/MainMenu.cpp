@@ -42,8 +42,8 @@ void pm::pl::MainMenu::displayAdminMenu(nanodbc::connection& conn, pm::types::Us
 void pm::pl::MainMenu::displayUserMenu(nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
-	std::cout << "User menu! " << std::endl;
-	std::cout << "Welcome " << user.firstName << " " << user.lastName << '!' << std::endl;
+	std::cout << "User menu! \n";
+	std::cout << "Welcome " << user.firstName << ' ' << user.lastName << '!' << '\n';
 	std::cin.get();
 }
 
