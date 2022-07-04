@@ -1,6 +1,7 @@
 #include "ProjectsManagement.h"
 
-void pm::pl::ProjectsManagement::displayProjectsManagement(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::ProjectsManagement::displayProjectsManagement(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
 	std::cout << "Projects management\n";
@@ -14,7 +15,9 @@ void pm::pl::ProjectsManagement::displayProjectsManagement(nanodbc::connection& 
 	handleProjectsManagement(conn, user, option);
 }
 
-void pm::pl::ProjectsManagement::handleProjectsManagement(nanodbc::connection& conn, pm::types::User& user, unsigned short int option)
+void pm::pl::ProjectsManagement::handleProjectsManagement(
+	nanodbc::connection& conn, pm::types::User& user,
+	unsigned short int option)
 {
 	switch (option)
 	{

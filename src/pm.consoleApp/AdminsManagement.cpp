@@ -1,35 +1,43 @@
 #include "AdminsManagement.h"
 
-void pm::pl::AdminsManagement::displaySortedUsers(nanodbc::connection& conn, pm::types::User& user,
+
+
+void pm::pl::AdminsManagement::displaySortedUsers(nanodbc::connection& conn,
+	pm::types::User& user,
 	std::vector<pm::types::User>& sortedUsers)
 {
 	std::cout << "Displaying sorted users!\n";
 	tabulate::Table table;
-	table.add_row({ "ID", "First Name", "Last Name", "Username", "Email", "Age", "Admin Status", "Last Change", "Created On" });
+	table.add_row({ "ID", "First Name", "Last Name",
+		"Username", "Email", "Age", "Admin Status",
+		"Last Change", "Created On" });
 
 	for (const auto& element : sortedUsers)
 	{
 		char createdOn[26];
 		char lastChange[26];
-		ctime_s(createdOn, sizeof createdOn, &element.createdOn);
-		ctime_s(lastChange, sizeof lastChange, &element.lastChange);
+		ctime_s(createdOn, sizeof createdOn,
+			&element.createdOn);
+		ctime_s(lastChange, sizeof lastChange,
+			&element.lastChange);
 
-		table.add_row({ std::to_string(element.id), element.firstName,
-			element.lastName, element.username, element.email, std::to_string(element.age),
+		table.add_row({ std::to_string(element.id),
+			element.firstName,element.lastName, element.username,
+			element.email, std::to_string(element.age),
 			std::to_string(element.isAdmin), createdOn,
 			lastChange });
 	}
 
 	for (size_t i = 0; i < 9; ++i) {
 		table[0][i].format()
-			.font_color(tabulate::Color::yellow)
+			.font_color(tabulate::Color::magenta)
 			.font_align(tabulate::FontAlign::center)
 			.font_style({ tabulate::FontStyle::bold });
 	}
 
 	std::cout << table << std::endl;
 
-	std::cout << "Back? (y/n)\n";
+	std::cout << "\nBack? (y/n)\n";
 	char answer;
 	std::cin >> answer;
 	if (answer == 'y')
@@ -43,13 +51,18 @@ void pm::pl::AdminsManagement::displaySortedUsers(nanodbc::connection& conn, pm:
 	}
 }
 
-void pm::pl::AdminsManagement::displaySortMenu(nanodbc::connection& conn, pm::types::User user, unsigned short int& option)
+void pm::pl::AdminsManagement::displaySortMenu(nanodbc::connection& conn,
+	pm::types::User user, unsigned short int& option)
 {
-	std::cout << "\nWhat do you want to sort by?\n \n1. Name \n2. Surname \n3. Username \n4. Email \n5. Age \n6. Last Changed \n7. Back" << std::endl;
+	std::cout << "\nWhat do you want to sort by?\n \n1. Name \n2. Surname";
+	std::cout << "\n3. Username \n4. Email \n5. Age \n6. Last Changed";
+	std::cout << "\n7. Back \n\nOption: ";
 	std::cin >> option;
+	std::cout << std::endl;
 }
 
-void pm::pl::AdminsManagement::displayDeleteMenu(nanodbc::connection& connection, pm::types::User user,
+void pm::pl::AdminsManagement::displayDeleteMenu(
+	nanodbc::connection& connection, pm::types::User user,
 	pm::types::User userToDelete, char& answer)
 {
 	system("cls");
@@ -59,7 +72,9 @@ void pm::pl::AdminsManagement::displayDeleteMenu(nanodbc::connection& connection
 	std::cin >> answer;
 }
 
-void pm::pl::AdminsManagement::displayEditMenu(nanodbc::connection& conn, pm::types::User user, pm::types::User selectedUser)
+void pm::pl::AdminsManagement::displayEditMenu(
+	nanodbc::connection& conn, pm::types::User user,
+	pm::types::User selectedUser)
 {
 	system("cls");
 	std::cout << "Edit user" << '\n';
@@ -68,19 +83,16 @@ void pm::pl::AdminsManagement::displayEditMenu(nanodbc::connection& conn, pm::ty
 
 	std::cout << "User details" << '\n' << '\n';
 
-	/*std::cout << "Name: " << selectedUser.firstName << '\n';
-	std::cout << "Surname: " << selectedUser.lastName << '\n';
-	std::cout << "username: " << selectedUser.username << '\n';
-	std::cout << "Email: " << selectedUser.email << '\n';
-	std::cout << "Age: " << selectedUser.age << '\n' << '\n';
-	*/
 	tabulate::Table table;
-	table.add_row({ "First name", "Last name", "Username", "Email", "Age" });
-	table.add_row({ (selectedUser.firstName), (selectedUser.lastName), (selectedUser.username), (selectedUser.email), std::to_string(selectedUser.age) });
+	table.add_row({ "First name", "Last name",
+		"Username", "Email", "Age" });
+	table.add_row({ (selectedUser.firstName),
+		(selectedUser.lastName), (selectedUser.username),
+		(selectedUser.email), std::to_string(selectedUser.age) });
 
 	for (size_t i = 0; i < 5; ++i) {
 		table[0][i].format()
-			.font_color(tabulate::Color::yellow)
+			.font_color(tabulate::Color::magenta)
 			.font_align(tabulate::FontAlign::center)
 			.font_style({ tabulate::FontStyle::bold });
 	}
@@ -102,25 +114,34 @@ void pm::pl::AdminsManagement::displayEditMenu(nanodbc::connection& conn, pm::ty
 	editMenuHandler(conn, user, selectedUser, option);
 }
 
-void pm::pl::AdminsManagement::displayUserDetails(nanodbc::connection& conn, pm::types::User user, pm::types::User selectedUser)
+void pm::pl::AdminsManagement::displayUserDetails(nanodbc::connection& conn,
+	pm::types::User user, pm::types::User selectedUser)
 {
 	system("cls");
 
 	char createdOn[26];
 	char lastChange[26];
-	ctime_s(createdOn, sizeof createdOn, &selectedUser.createdOn);
-	ctime_s(lastChange, sizeof lastChange, &selectedUser.lastChange);
+	ctime_s(createdOn, sizeof createdOn,
+		&selectedUser.createdOn);
+	ctime_s(lastChange, sizeof lastChange,
+		&selectedUser.lastChange);
 
 	std::cout << "User details" << '\n' << '\n';
 
 	tabulate::Table table;
 
-	table.add_row({ "Id", "Name", "Surname", "Username", "Email", "Age", "Is Admin", "Created On", "Last Changed" }); \
-		table.add_row({ std::to_string(selectedUser.id), selectedUser.firstName, selectedUser.lastName, selectedUser.username, selectedUser.email, std::to_string(selectedUser.age), std::to_string(selectedUser.isAdmin), createdOn, lastChange });
+	table.add_row({ "Id", "Name", "Surname", "Username",
+		"Email", "Age", "Is Admin", "Created On", "Last Changed" });
+	table.add_row({ std::to_string(selectedUser.id),
+		selectedUser.firstName, selectedUser.lastName,
+		selectedUser.username, selectedUser.email,
+		std::to_string(selectedUser.age),
+		std::to_string(selectedUser.isAdmin),
+		createdOn, lastChange });
 
 	for (size_t i = 0; i < 9; ++i) {
 		table[0][i].format()
-			.font_color(tabulate::Color::yellow)
+			.font_color(tabulate::Color::magenta)
 			.font_align(tabulate::FontAlign::center)
 			.font_style({ tabulate::FontStyle::bold });
 	}
@@ -137,7 +158,8 @@ void pm::pl::AdminsManagement::displayUserDetails(nanodbc::connection& conn, pm:
 		exit(0);
 }
 
-void pm::pl::AdminsManagement::displayAdminPanel(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::AdminsManagement::displayAdminPanel(nanodbc::connection& conn,
+	pm::types::User& user)
 {
 	system("cls");
 	std::cout << "1. Add user" << '\n';
@@ -151,10 +173,13 @@ void pm::pl::AdminsManagement::displayAdminPanel(nanodbc::connection& conn, pm::
 	unsigned short int option{};
 	std::cin >> option;
 
-	pm::pl::AdminsManagement::handleAdminsManagement(conn, user, option);
+	pm::pl::AdminsManagement::handleAdminsManagement(
+		conn, user, option);
 }
 
-void pm::pl::AdminsManagement::handleAdminsManagement(nanodbc::connection& conn, pm::types::User& user, unsigned short int& option)
+void pm::pl::AdminsManagement::handleAdminsManagement(
+	nanodbc::connection& conn, pm::types::User& user,
+	unsigned short int& option)
 {
 	switch (option)
 	{
@@ -182,31 +207,39 @@ void pm::pl::AdminsManagement::handleAdminsManagement(nanodbc::connection& conn,
 	}
 }
 
-void pm::pl::AdminsManagement::editMenuHandler(nanodbc::connection& conn, pm::types::User& user,
+void pm::pl::AdminsManagement::editMenuHandler(
+	nanodbc::connection& conn, pm::types::User& user,
 	pm::types::User& selectedUser, const unsigned short& option)
 {
 	switch (option)
 	{
 	case 1:	//Edit Name
-		pm::bll::UserManager::editName(conn, user, selectedUser);
+		pm::bll::UserManager::editName(
+			conn, user, selectedUser);
 		break;
 	case 2: //Edit Surname
-		pm::bll::UserManager::editSurname(conn, user, selectedUser);
+		pm::bll::UserManager::editSurname(
+			conn, user, selectedUser);
 		break;
 	case 3: //Edit username
-		pm::bll::UserManager::editUsername(conn, user, selectedUser);
+		pm::bll::UserManager::editUsername(
+			conn, user, selectedUser);
 		break;
 	case 4: //Edit email
-		pm::bll::UserManager::editEmail(conn, user, selectedUser);
+		pm::bll::UserManager::editEmail(
+			conn, user, selectedUser);
 		break;
 	case 5: //Edit password
-		pm::bll::UserManager::editPassword(conn, user, selectedUser);
+		pm::bll::UserManager::editPassword(
+			conn, user, selectedUser);
 		break;
 	case 6: //Edit age
-		pm::bll::UserManager::editAge(conn, user, selectedUser);
+		pm::bll::UserManager::editAge(
+			conn, user, selectedUser);
 		break;
 	case 7: //Edit Admin Status
-		pm::bll::UserManager::editAdminStatus(conn, user, selectedUser);
+		pm::bll::UserManager::editAdminStatus(
+			conn, user, selectedUser);
 		break;
 	}
 }
@@ -279,7 +312,8 @@ void pm::pl::AdminsManagement::getNewAdminStatus(pm::types::User& selectedUser)
 	std::cin >> selectedUser.isAdmin;
 }
 
-void pm::pl::AdminsManagement::updatedSuccessfully(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::AdminsManagement::updatedSuccessfully(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
 	std::cout << "Update successful" << '\n';
@@ -293,26 +327,31 @@ void pm::pl::AdminsManagement::updatedSuccessfully(nanodbc::connection& conn, pm
 		exit(0);
 }
 
-void pm::pl::AdminsManagement::displayUsers(nanodbc::connection& conn, pm::types::User& userToDisplay, std::vector<pm::types::User>& users)
+void pm::pl::AdminsManagement::displayUsers(
+	nanodbc::connection& conn, pm::types::User& userToDisplay,
+	std::vector<pm::types::User>& users)
 {
-	unsigned short int c{};
 	tabulate::Table table;
-	table.add_row({ "ID", "First Name", "Last Name", "Username", "Email", "Age", "IsAdmin" });
+	table.add_row({ "ID", "First Name", "Last Name",
+		"Username", "Email", "Age", "IsAdmin" });
 	for (const auto& element : users)
 	{
-		table.add_row({ std::to_string(element.id), element.firstName, element.lastName, element.username, element.email, std::to_string(element.age), std::to_string(element.isAdmin) });
-		c++;
+		table.add_row({ std::to_string(element.id),
+			element.firstName, element.lastName, element.username,
+			element.email, std::to_string(element.age),
+			std::to_string(element.isAdmin) });
 	}
-	for (size_t i = 0; i < c; ++i) {
+	for (size_t i = 0; i < 7; ++i) {
 		table[0][i].format()
-			.font_color(tabulate::Color::yellow)
+			.font_color(tabulate::Color::magenta)
 			.font_align(tabulate::FontAlign::center)
 			.font_style({ tabulate::FontStyle::bold });
 	}
 	std::cout << table << std::endl;
 }
 
-void pm::pl::AdminsManagement::userCreated(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::AdminsManagement::userCreated(nanodbc::connection& conn,
+	pm::types::User& user)
 {
 	std::cout << "\nUser created successfully!" << std::endl;
 	std::cout << "Go back? (y/n)" << std::endl;
@@ -331,7 +370,8 @@ void pm::pl::AdminsManagement::userCreated(nanodbc::connection& conn, pm::types:
 	}
 }
 
-void pm::pl::AdminsManagement::logout(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::AdminsManagement::logout(nanodbc::connection& conn,
+	pm::types::User& user)
 {
 	std::cin.get();
 	system("cls");

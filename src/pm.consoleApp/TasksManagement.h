@@ -12,7 +12,10 @@ namespace pm::pl
 {
 	struct TasksManagement
 	{
-		static void displayTasksManagement(nanodbc::connection& conn, pm::types::User user);
-		static void handleTaskManagement(nanodbc::connection& conn, pm::types::User user, unsigned short int option);
+		static void displayTasksManagement(
+			nanodbc::connection& conn, pm::types::User user);
+		static void handleTaskManagement(
+			nanodbc::connection& conn, pm::types::User user,
+			unsigned short int option);
 	};
 }

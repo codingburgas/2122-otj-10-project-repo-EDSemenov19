@@ -25,7 +25,11 @@ pm::bll::UserManager userManager;
 int main() try
 {
 	pm::pl::Application app;
-	const std::string connstr = NANODBC_TEXT("Driver={ODBC Driver 17 for SQL Server};Server=PCBURGAS;Database=PMDB;Trusted_Connection=yes;"); // an ODBC connection string to your database
+	const std::string connstr = NANODBC_TEXT(R"(
+	Driver={ODBC Driver 17 for SQL Server};
+	Server=PCBURGAS;
+	Database=PMDB;
+	Trusted_Connection=yes;")"); // an ODBC connection string to your database
 	nanodbc::connection conn(connstr);
 
 	app.run(conn);

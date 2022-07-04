@@ -13,7 +13,9 @@ namespace pm::pl
 {
 	struct ProjectsManagement
 	{
-		static void handleProjectsManagement(nanodbc::connection& conn, pm::types::User& user, unsigned short option);
-		static void displayProjectsManagement(nanodbc::connection& conn, pm::types::User& user);
+		static void handleProjectsManagement(nanodbc::connection& conn,
+			pm::types::User& user, unsigned short option);
+		static void displayProjectsManagement(nanodbc::connection& conn,
+			pm::types::User& user);
 	};
 }

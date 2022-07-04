@@ -1,6 +1,7 @@
 #include "TasksManagement.h"
 
-void pm::pl::TasksManagement::displayTasksManagement(nanodbc::connection& conn, pm::types::User user)
+void pm::pl::TasksManagement::displayTasksManagement(
+	nanodbc::connection& conn, pm::types::User user)
 {
 	system("cls");
 	std::cout << "Tasks management\n";
@@ -15,7 +16,8 @@ void pm::pl::TasksManagement::displayTasksManagement(nanodbc::connection& conn, 
 	handleTaskManagement(conn, user, option);
 }
 
-void pm::pl::TasksManagement::handleTaskManagement(nanodbc::connection& conn, pm::types::User user,
+void pm::pl::TasksManagement::handleTaskManagement(
+	nanodbc::connection& conn, pm::types::User user,
 	unsigned short option)
 {
 	switch (option)

@@ -13,12 +13,21 @@ namespace pm::pl
 	struct TeamsManagement
 	{
 		static pm::types::Team getTeam();
-		static void displayTeamsOfUser(nanodbc::connection& conn, pm::types::User& user);
-		static void displayTeamsOfProject(nanodbc::connection& conn, pm::types::User& user);
-		static void handleTeamsDisplay(nanodbc::connection& conn, pm::types::User& user, unsigned short int option);
-		static void displayAllteams(nanodbc::connection& conn, pm::types::User& user);
-		static void displayTeamsView(nanodbc::connection& conn, pm::types::User& user);
-		static void displayTeamsManagement(nanodbc::connection& conn, pm::types::User user);
-		static void handleTeamsView(nanodbc::connection& conn, pm::types::User& user, unsigned short option);
+		static void displayTeamsOfUser(
+			nanodbc::connection& conn, pm::types::User& user);
+		static void displayTeamsOfProject(
+			nanodbc::connection& conn, pm::types::User& user);
+		static void handleTeamsDisplay(
+			nanodbc::connection& conn, pm::types::User& user,
+			unsigned short int option);
+		static void displayAllteams(
+			nanodbc::connection& conn, pm::types::User& user);
+		static void displayTeamsView(
+			nanodbc::connection& conn, pm::types::User& user);
+		static void displayTeamsManagement(
+			nanodbc::connection& conn, pm::types::User user);
+		static void handleTeamsView(
+			nanodbc::connection& conn, pm::types::User& user,
+			unsigned short option);
 	};
 }

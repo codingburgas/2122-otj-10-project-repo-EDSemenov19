@@ -1,11 +1,13 @@
 #include "TeamsManagement.h"
 
-void pm::pl::TeamsManagement::displayAllteams(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::displayAllteams(nanodbc::connection& conn,
+	pm::types::User& user)
 {
 
 }
 
-void pm::pl::TeamsManagement::displayTeamsView(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::displayTeamsView(nanodbc::connection& conn,
+	pm::types::User& user)
 {
 	system("cls");
 	std::cout << "Teams view!\n";
@@ -20,7 +22,8 @@ void pm::pl::TeamsManagement::displayTeamsView(nanodbc::connection& conn, pm::ty
 	pm::pl::TeamsManagement::handleTeamsView(conn, user, option);
 }
 
-void pm::pl::TeamsManagement::displayTeamsManagement(nanodbc::connection& conn, pm::types::User user)
+void pm::pl::TeamsManagement::displayTeamsManagement(
+	nanodbc::connection& conn, pm::types::User user)
 {
 	system("cls");
 	std::cout << "Teams management\n";
@@ -49,7 +52,8 @@ pm::types::Team pm::pl::TeamsManagement::getTeam()
 	return team;
 }
 
-void pm::pl::TeamsManagement::displayTeamsOfUser(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::displayTeamsOfUser(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Display teams of a user\n";
 	std::cout << "Users: \n";
@@ -59,12 +63,15 @@ void pm::pl::TeamsManagement::displayTeamsOfUser(nanodbc::connection& conn, pm::
 	std::cout << "Please enter the user's id: ";
 }
 
-void pm::pl::TeamsManagement::displayTeamsOfProject(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::displayTeamsOfProject(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 
 }
 
-void pm::pl::TeamsManagement::handleTeamsDisplay(nanodbc::connection& conn, pm::types::User& user, unsigned short int option)
+void pm::pl::TeamsManagement::handleTeamsDisplay(
+	nanodbc::connection& conn, pm::types::User& user,
+	unsigned short int option)
 {
 	switch (option)
 	{
@@ -82,7 +89,8 @@ void pm::pl::TeamsManagement::handleTeamsDisplay(nanodbc::connection& conn, pm::
 	}
 }
 
-void pm::pl::TeamsManagement::handleTeamsView(nanodbc::connection& conn, pm::types::User& user,
+void pm::pl::TeamsManagement::handleTeamsView(
+	nanodbc::connection& conn, pm::types::User& user,
 	unsigned short int option)
 {
 	switch (option)

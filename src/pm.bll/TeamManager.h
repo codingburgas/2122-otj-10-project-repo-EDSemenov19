@@ -10,8 +10,10 @@ namespace pm::bll
 {
 	struct TeamManager
 	{
-		static void createTeam(nanodbc::connection& conn, pm::types::User& user);
-		static void deleteTeam(nanodbc::connection& conn, pm::types::User& user);
+		static void createTeam(
+			nanodbc::connection& conn, pm::types::User& user);
+		static void deleteTeam(
+			nanodbc::connection& conn, pm::types::User& user);
 
 	};
 }

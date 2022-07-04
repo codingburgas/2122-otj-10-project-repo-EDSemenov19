@@ -9,6 +9,8 @@ namespace pm::dal
 {
 	struct TeamStore
 	{
-		static void registerTeam(nanodbc::connection& conn, pm::types::User& user, pm::types::Team& team);
+		static void registerTeam(
+			nanodbc::connection& conn, pm::types::User& user,
+			pm::types::Team& team);
 	};
 }
