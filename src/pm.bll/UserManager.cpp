@@ -165,6 +165,51 @@ void pm::bll::UserManager::editAdminStatus(nanodbc::connection& conn, pm::types:
 	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
 }
 
+void pm::bll::UserManager::sortUsers(nanodbc::connection& conn, pm::types::User& user)
+{
+	unsigned short int option{};
+	system("cls");
+	auto users = pm::dal::UserStore::getAllUsers(conn, user);
+	pm::pl::AdminsManagement::displayUsers(conn, user, users);
+	pm::pl::AdminsManagement::displaySortMenu(conn, user, option);
+
+	users.clear();
+	pm::bll::UserManager::sortOptionHandler(conn, user, option, users);
+
+	system("cls");
+	pm::pl::AdminsManagement::displaySortedUsers(conn, user, users);
+
+	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
+}
+
+void pm::bll::UserManager::sortOptionHandler(nanodbc::connection& conn, pm::types::User& user, unsigned short option, std::vector<pm::types::User>& sortedUsers)
+{
+	switch (option)
+	{
+	case 1:
+		sortedUsers = pm::dal::UserStore::sortByFirstName(conn, user);
+		break;
+	case 2:
+		sortedUsers = pm::dal::UserStore::sortByLastName(conn, user);
+		break;
+	case 3:
+		sortedUsers = pm::dal::UserStore::sortByUsername(conn, user);
+		break;
+	case 4:
+		sortedUsers = pm::dal::UserStore::sortByEmail(conn, user);
+		break;
+	case 5:
+		sortedUsers = pm::dal::UserStore::sortByAge(conn, user);
+		break;
+	case 6:
+		sortedUsers = pm::dal::UserStore::sortByLastChange(conn, user);
+		break;
+	case 7:
+		pm::pl::AdminsManagement::displayAdminPanel(conn, user);
+		break;
+	}
+}
+
 void pm::bll::UserManager::deleteUser(nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
@@ -187,14 +232,8 @@ void pm::bll::UserManager::deleteUser(nanodbc::connection& conn, pm::types::User
 	else
 	{
 		system("cls");
-		pm::pl::AdminsManagement::displayAdminsManagement(conn, user);
+		pm::pl::AdminsManagement::displayAdminPanel(conn, user);
 	}
 
 	pm::pl::AdminsManagement::updatedSuccessfully(conn, user);
-}
-
-void pm::bll::UserManager::updateUser(pm::types::User user)
-{
-	// TODO: data integrity check;
-	m_userStore.update(user);
 }

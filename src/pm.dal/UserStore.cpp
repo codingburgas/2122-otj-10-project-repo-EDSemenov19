@@ -184,8 +184,34 @@ std::vector<pm::types::User> pm::dal::UserStore::getAllUsers(nanodbc::connection
 	return users;
 }
 
+std::vector<pm::types::User> pm::dal::UserStore::getAllSortedUsers(nanodbc::result& result)
+{
+	std::vector<pm::types::User> users;
+	while (result.next())
+	{
+		auto id = result.get<size_t>("id");
+		auto firstName = result.get<std::string>("firstName");
+		auto lastName = result.get<std::string>("lastName");
+		auto username = result.get<std::string>("username");
+		auto email = result.get<std::string>("email");
+		auto age = result.get<size_t>("age");
+		auto passwordHash = result.get<std::string>("passwordHash");
+
+		auto createdOnTP = result.get<nanodbc::timestamp>("createdOn");
+		auto lastChangeTP = result.get<nanodbc::timestamp>("lastChange");
+		auto createdOn = getTime(createdOnTP);
+		auto lastChange = getTime(lastChangeTP);
+
+		auto isAdmin = result.get<int>("isAdmin");
+
+		users.emplace_back(id, firstName, lastName, username, email, age, passwordHash, createdOn, lastChange, isAdmin);
+	}
+
+	return users;
+}
+
 void pm::dal::UserStore::updateFirstName(nanodbc::connection& conn, pm::types::User& user,
-	pm::types::User& selectedUser)
+                                         pm::types::User& selectedUser)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
@@ -237,6 +263,8 @@ void pm::dal::UserStore::updateEmail(nanodbc::connection& conn, pm::types::User&
 	execute(stmt);
 }
 
+
+
 void pm::dal::UserStore::updatePassword(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser)
 {
 	nanodbc::statement stmt(conn);
@@ -278,7 +306,74 @@ void pm::dal::UserStore::updateAdminStatus(nanodbc::connection& conn, pm::types:
 	execute(stmt);
 }
 
-void pm::dal::UserStore::update(const pm::types::User user) const
+std::vector<pm::types::User> pm::dal::UserStore::sortByFirstName(nanodbc::connection & conn, pm::types::User & user)
 {
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		SELECT *
+		FROM Users
+		ORDER BY firstName)"));
+	auto sortedResult = execute(stmt);
+	auto sortedUsers = getAllSortedUsers(sortedResult);
+	return sortedUsers;
+}
 
+std::vector<pm::types::User> pm::dal::UserStore::sortByLastName(nanodbc::connection& conn, pm::types::User& user)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+		SELECT *
+		FROM Users
+		ORDER BY lastName)"));
+	auto sortedResult = execute(stmt);
+	auto sortedUsers = getAllSortedUsers(sortedResult);
+	return sortedUsers;
+}
+
+std::vector<pm::types::User> pm::dal::UserStore::sortByUsername(nanodbc::connection& conn, pm::types::User& user)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+		SELECT *
+		FROM Users
+		ORDER BY username)"));
+	auto sortedResult = execute(stmt);
+	auto sortedUsers = getAllSortedUsers(sortedResult);
+	return sortedUsers;
+}
+
+std::vector<pm::types::User> pm::dal::UserStore::sortByEmail(nanodbc::connection& conn, pm::types::User& user)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+		SELECT *
+		FROM Users
+		ORDER BY email)"));
+	auto sortedResult = execute(stmt);
+	auto sortedUsers = getAllSortedUsers(sortedResult);
+	return sortedUsers;
+}
+
+std::vector<pm::types::User> pm::dal::UserStore::sortByAge(nanodbc::connection& conn, pm::types::User& user)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+		SELECT *
+		FROM Users
+		ORDER BY age)"));
+	auto sortedResult = execute(stmt);
+	auto sortedUsers = getAllSortedUsers(sortedResult);
+	return sortedUsers;
+}
+
+std::vector<pm::types::User> pm::dal::UserStore::sortByLastChange(nanodbc::connection& conn, pm::types::User& user)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		SELECT *
+		FROM Users
+		ORDER BY lastChange)"));
+	auto sortedResult = execute(stmt);
+	auto sortedUsers = getAllSortedUsers(sortedResult);
+	return sortedUsers;
 }

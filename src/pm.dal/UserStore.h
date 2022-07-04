@@ -16,10 +16,10 @@ namespace pm::dal
 		static pm::types::User getUserById(nanodbc::connection& conn, const unsigned short option);
 		pm::types::User getByUsername(std::string email, nanodbc::connection& conn);
 		static void deleteUser(nanodbc::connection& conn, pm::types::User& user, pm::types::User& userToDelete);
-		void update(pm::types::User user) const;
 		static void getUsersToView(nanodbc::connection& conn, pm::types::User& user);
 		static nanodbc::result getAllElements(nanodbc::connection& conn);
 		static std::vector<pm::types::User> getAllUsers(nanodbc::connection& conn, pm::types::User& user);
+		static std::vector<pm::types::User> getAllSortedUsers(nanodbc::result& result);
 
 		static void updateFirstName(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
 		static void updateLastName(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
@@ -28,5 +28,12 @@ namespace pm::dal
 		static void updatePassword(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
 		static void updateAge(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
 		static void updateAdminStatus(nanodbc::connection& conn, pm::types::User& user, pm::types::User& selectedUser);
+
+		static std::vector<pm::types::User> sortByFirstName(nanodbc::connection& conn, pm::types::User& user);
+		static std::vector<pm::types::User> sortByLastName(nanodbc::connection& conn, pm::types::User& user);
+		static std::vector<pm::types::User> sortByUsername(nanodbc::connection& conn, pm::types::User& user);
+		static std::vector<pm::types::User> sortByEmail(nanodbc::connection& conn, pm::types::User& user);
+		static std::vector<pm::types::User> sortByAge(nanodbc::connection& conn, pm::types::User& user);
+		static std::vector<pm::types::User> sortByLastChange(nanodbc::connection&, pm::types::User& user);
 	};
 }

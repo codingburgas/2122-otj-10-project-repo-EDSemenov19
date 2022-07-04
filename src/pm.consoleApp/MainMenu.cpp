@@ -52,7 +52,7 @@ void pm::pl::MainMenu::handle(nanodbc::connection& conn, pm::types::User& user, 
 	switch (option)
 	{
 	case 1:
-		AdminsManagement::displayAdminsManagement(conn, user);
+		AdminsManagement::displayAdminPanel(conn, user);
 		break;
 	case 2:
 		TeamsManagement::displayTeamsManagement(conn, user);
@@ -67,6 +67,7 @@ void pm::pl::MainMenu::handle(nanodbc::connection& conn, pm::types::User& user, 
 		AdminsManagement::logout(conn, user);
 		break;
 	case 6:
+		exit(0);
 		break;
 	default:
 		std::cout << "Invalid option!" << std::endl;

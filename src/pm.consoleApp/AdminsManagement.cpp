@@ -1,7 +1,43 @@
 #include "AdminsManagement.h"
 
+void pm::pl::AdminsManagement::displaySortedUsers(nanodbc::connection& conn, pm::types::User& user,
+	std::vector<pm::types::User>& sortedUsers)
+{
+	std::cout << "Displaying sorted users!\n";
+	for (const auto& element : sortedUsers)
+	{
+		char createdOn[26];
+		char lastChange[26];
+		ctime_s(createdOn, sizeof createdOn, &element.createdOn);
+		ctime_s(lastChange, sizeof lastChange, &element.lastChange);
+
+		std::cout << element.id << ". " << element.firstName << ' '
+		<< element.lastName << ' ' << element.username << ' ' << element.email << ' ' << element.age
+		<< " Is admin: "<< element.isAdmin
+		<< '\n' << createdOn << ' ' << lastChange << '\n';
+	}
+	std::cout << "Back? (y/n)\n";
+	char answer;
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::pl::AdminsManagement::displayAdminPanel(conn, user);
+	}
+	else
+	{
+		std::cout << "Exiting...\n";
+		exit(0);
+	}
+}
+
+void pm::pl::AdminsManagement::displaySortMenu(nanodbc::connection& conn, pm::types::User user, unsigned short int& option)
+{
+	std::cout << "\nWhat do you want to sort by?\n \n1. Name \n2. Surname \n3. Username \n4. Email \n5. Age \n6. Last Changed \n7. Back" << std::endl;
+	std::cin >> option;
+}
+
 void pm::pl::AdminsManagement::displayDeleteMenu(nanodbc::connection& connection, pm::types::User user,
-	pm::types::User userToDelete, char& answer)
+                                                 pm::types::User userToDelete, char& answer)
 {
 	system("cls");
 	std::cout << "Are you sure you want to delete user " << 
@@ -28,7 +64,7 @@ void pm::pl::AdminsManagement::displayEditMenu(nanodbc::connection& conn, pm::ty
 	std::cout << "4. Edit email\n";
 	std::cout << "5. Edit password\n";
 	std::cout << "6. Edit age\n";
-	std::cout << "7. Edit Admin Status\n";
+	std::cout << "7. Edit Admin Status\n\n";
 
 	std::cout << "Option: ";
 	unsigned short int option{};
@@ -61,17 +97,17 @@ void pm::pl::AdminsManagement::displayUserDetails(nanodbc::connection& conn, pm:
 	else
 		std::cout << "IsAdmin : No" << '\n';
 
-	std::cout << "'\n'Go back? (y/n)" << '\n';
+	std::cout << "\nGo back? (y/n)" << '\n';
 	char choice;
 	std::cin >> choice;
 
 	if (choice == 'y')
-		displayAdminsManagement(conn, user);
+		displayAdminPanel(conn, user);
 	else
 		exit(0);
 }
 
-void pm::pl::AdminsManagement::displayAdminsManagement(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::AdminsManagement::displayAdminPanel(nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
 	std::cout << "1. Add user" << '\n';
@@ -105,13 +141,13 @@ void pm::pl::AdminsManagement::handleAdminsManagement(nanodbc::connection& conn,
 		pm::bll::UserManager::viewUserDetails(conn, user);
 		break;
 	case 5:
-		//pm::dal::UserStore::sort(conn, user);
+		pm::bll::UserManager::sortUsers(conn, user);
 		break;
 	case 6:
 		pm::pl::MainMenu::displayAdminMenu(conn, user);
 		break;
 	default:
-		//std::cout << "Invalid option" << std::endl;
+		std::cout << "Invalid option" << std::endl;
 		break;
 	}
 }
@@ -222,7 +258,7 @@ void pm::pl::AdminsManagement::updatedSuccessfully(nanodbc::connection& conn, pm
 	std::cin >> choice;
 
 	if (choice == 'y')
-		displayAdminsManagement(conn, user);
+		displayAdminPanel(conn, user);
 	else
 		exit(0);
 }
@@ -245,7 +281,7 @@ void pm::pl::AdminsManagement::userCreated(nanodbc::connection& conn, pm::types:
 	if (option == 'y')
 	{
 		system("cls");
-		pm::pl::AdminsManagement::displayAdminsManagement(conn, user);
+		pm::pl::AdminsManagement::displayAdminPanel(conn, user);
 	}
 	else
 	{

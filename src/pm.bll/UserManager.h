@@ -24,8 +24,9 @@ namespace pm::bll {
 
 		void seedDatabase();
 
+		static void sortOptionHandler(nanodbc::connection& conn, pm::types::User& user, unsigned short option, std::vector<pm::types::User>& sortedUsers);
+		static void sortUsers(nanodbc::connection& conn, pm::types::User& user);
 		static void deleteUser(nanodbc::connection& conn, pm::types::User& user);
-
-		void updateUser(pm::types::User);
+		
 	};
 }
