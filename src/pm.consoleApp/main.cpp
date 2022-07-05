@@ -8,8 +8,6 @@
 #include "../../lib/nanodbc/nanodbc.h"
 #include "login.h"
 
-pm::bll::UserManager userManager;
-
 /*void listRegisteredUsers()
 {
 	auto users = userManager.getRegisteredUsers();

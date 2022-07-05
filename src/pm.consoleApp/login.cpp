@@ -25,7 +25,7 @@ pm::types::User pm::pl::Login::getUserLogged(nanodbc::connection& conn)
 
 	try
 	{
-		user = userManager_.loginUser(email, password, conn);
+		user = pm::bll::UserManager::loginUser(email, password, conn);
 	}
 
 	catch (std::logic_error& e)

@@ -8,7 +8,7 @@ void pm::pl::ProjectsManagement::displayProjectsManagement(
 	std::cout << "1. Create Project\n";
 	std::cout << "2. Delete Project\n";
 	std::cout << "3. Manage Projects\n";
-	std::cout << "4. Back\n";
+	std::cout << "4. Back\n\nOption: ";
 
 	unsigned short int option{};
 	std::cin >> option;

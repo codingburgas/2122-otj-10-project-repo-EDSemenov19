@@ -10,11 +10,11 @@ void pm::pl::Application::run(nanodbc::connection& conn)
 	
 	if(user.isAdmin)
 	{
-		MainMenu::displayAdminMenu(conn, user);
+		pm::pl::MainMenu::displayAdminMenu(conn, user);
 	}
 	else
 	{
-		MainMenu::displayUserMenu(conn, user);
+		pm::pl::MainMenu::displayUserMenu(conn, user);
 	}
 	
 	//mainMenu.displayMenu(conn, user);

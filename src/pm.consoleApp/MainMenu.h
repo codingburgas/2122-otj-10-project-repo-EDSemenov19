@@ -7,22 +7,17 @@
 
 namespace pm::pl
 {
-	struct MainMenu
+	namespace MainMenu
 	{
-		std::vector<pm::types::MenuItem> items;
-
 		void* handleOption1(void*);
-		static void displayMenu(
+		void displayMenu(
 			nanodbc::connection& conn, pm::types::User& user);
-		static void displayUserMenu(
+		void displayUserMenu(
 			nanodbc::connection& conn, pm::types::User& user);
-		static void displayAdminMenu(
+		void displayAdminMenu(
 			nanodbc::connection& conn, pm::types::User& user);
-		static void handle(
+		void handle(
 			nanodbc::connection& conn, pm::types::User& user,
 			unsigned short int option);
-		void handleOption1();
-	};
-
-	void initAndShowMainMenu(nanodbc::connection& conn);
+	}
 }

@@ -8,11 +8,6 @@
 #include <algorithm>
 #include <iostream>
 
-void* pm::pl::MainMenu::handleOption1(void*)
-{
-	return nullptr;
-}
-
 void pm::pl::MainMenu::displayMenu(
 	nanodbc::connection& conn, pm::types::User& user)
 {
@@ -25,9 +20,16 @@ void pm::pl::MainMenu::displayAdminMenu(
 	nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
-	std::cout << "Admin menu! " << std::endl;
-	std::cout << "Welcome " << user.firstName << " " <<
-		user.lastName << '!' << std::endl;
+	tabulate::Table table;
+
+	table.add_row({ "Admin Menu!" });
+	table.add_row({ "Welcome " + user.firstName + " " +
+		user.lastName + "!" });
+	table[0][0].format().font_color(tabulate::Color::blue);
+	table[0][0].format().width(50);
+	table[0][0].format().font_align(tabulate::FontAlign::center);
+
+	std::cout << table << std::endl;
 	std::cout << "1. Users management!" << std::endl;
 	std::cout << "2. Teams management!" << std::endl;
 	std::cout << "3. Projects management!" << std::endl;
@@ -80,18 +82,4 @@ void pm::pl::MainMenu::handle(nanodbc::connection& conn,
 		break;
 	}
 
-}
-
-
-void pm::pl::initAndShowMainMenu(nanodbc::connection& conn)
-{
-	pm::pl::MainMenu mainMenu;
-
-	//mainMenu.items.push_back({ '1', "Item1",   });
-	mainMenu.items.push_back({ '2', "Item2",
-		nullptr });
-	mainMenu.items.push_back({ '3', "Item3",
-		nullptr });
-
-	//mainMenu.handle(conn);
 }

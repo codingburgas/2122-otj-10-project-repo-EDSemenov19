@@ -7,10 +7,10 @@
 
 namespace pm::dal
 {
-	struct TeamStore
+	namespace TeamStore
 	{
-		static void registerTeam(
+		void registerTeam(
 			nanodbc::connection& conn, pm::types::User& user,
 			pm::types::Team& team);
-	};
+	}
 }

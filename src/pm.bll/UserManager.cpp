@@ -55,7 +55,7 @@ void pm::bll::UserManager::registerNewUser(
 	pm::pl::AdminsManagement::userCreated(conn, user);
 }
 
-bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn) const
+bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn)
 {
 	nanodbc::result result = pm::dal::UserStore::getAllElements(conn);
 	return (result.rows() == 0) ? false : true;
@@ -66,7 +66,7 @@ pm::types::User pm::bll::UserManager::loginUser(
 	nanodbc::connection& conn)
 {
 
-	if (checkForNoUsers(conn)
+	if (pm::bll::UserManager::checkForNoUsers(conn)
 		&& username == "admin" && password == "adminpass")
 	{
 		return pm::types::User(
@@ -74,12 +74,12 @@ pm::types::User pm::bll::UserManager::loginUser(
 			0, "adminpass", true);
 	}
 
-	if (!m_userStore.checkByUsername(conn, username))
+	if (!pm::dal::UserStore::checkByUsername(conn, username))
 	{
 		pm::pl::Login::userLoginFailed();
 	}
 
-	pm::types::User user = m_userStore.getByUsername(
+	pm::types::User user = pm::dal::UserStore::getByUsername(
 		username, conn);
 
 	std::string passHash = hashString(password);

@@ -11,8 +11,7 @@ namespace pm::pl
 	{
 		std::string email{};
 		std::string password{};
-
-		pm::bll::UserManager userManager_;
+	
 	public:
 		void printLogin();
 		static void userLoginFailed();
