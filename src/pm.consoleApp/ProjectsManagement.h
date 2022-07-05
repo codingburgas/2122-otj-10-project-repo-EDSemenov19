@@ -14,6 +14,18 @@ namespace pm::pl
 {
 	namespace ProjectsManagement
 	{
+		size_t getProjectId(
+			nanodbc::connection& conn, pm::types::User& user);
+		std::string getProjectDescription(
+			nanodbc::connection& conn, pm::types::User& user);
+		std::string getProjectTitle(
+			nanodbc::connection& conn, pm::types::User& user);
+		void projectDeleted(
+			nanodbc::connection& conn, pm::types::User& user);
+		void projectTitleChanged(
+			nanodbc::connection& conn, pm::types::User& user);
+		void projectDescriptionChanged(
+			nanodbc::connection& conn, pm::types::User& user);
 		void projectsDisplayed(
 			nanodbc::connection& conn, pm::types::User& user);
 		void handleProjectsMenu(

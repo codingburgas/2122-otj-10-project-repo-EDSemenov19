@@ -9,6 +9,12 @@ namespace pm::bll
 {
 	namespace ProjectManager
 	{
+		void projectDeleted(
+			nanodbc::connection& conn, pm::types::User& user);
+		void projectTitleChanged(
+			nanodbc::connection& conn, pm::types::User& user);
+		void projectDescriptionChanged(
+			nanodbc::connection& conn, pm::types::User& user);
 		void createProject(
 			nanodbc::connection& conn, pm::types::User& user);
 		void projectCreated(

@@ -42,12 +42,14 @@ void pm::bll::TeamManager::deleteTeam(
 	pm::dal::TeamStore::deleteTeam(conn, user, option);
 }
 
-void pm::bll::TeamManager::teamCreated(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::teamCreated(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::displayTeamCreatedMenu(conn, user);
 }
 
-void pm::bll::TeamManager::displayAllteams(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::displayAllteams(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::vector<pm::types::Team> teams =
 		pm::dal::TeamStore::getTeams(conn, user);
@@ -58,7 +60,8 @@ void pm::bll::TeamManager::displayAllteams(nanodbc::connection& conn, pm::types:
 	pm::pl::TeamsManagement::teamsDisplayed(conn, user);
 }
 
-void pm::bll::TeamManager::displayTeamsOfUser(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::displayTeamsOfUser(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::vector<pm::types::User> users =
 		pm::dal::UserStore::getAllUsers(conn, user);
@@ -74,11 +77,13 @@ void pm::bll::TeamManager::displayTeamsOfUser(nanodbc::connection& conn, pm::typ
 	pm::pl::TeamsManagement::teamsDisplayed(conn, user);
 }
 
-void pm::bll::TeamManager::displayTeamsOfProject(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::displayTeamsOfProject(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 }
 
-void pm::bll::TeamManager::assignUser(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::assignUser(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::vector<pm::types::User> users =
 		pm::dal::UserStore::getAllUsers(conn, user);
@@ -93,7 +98,8 @@ void pm::bll::TeamManager::assignUser(nanodbc::connection& conn, pm::types::User
 	pm::dal::TeamStore::assignUser(conn, user, userId, teamId);
 }
 
-void pm::bll::TeamManager::unassignUser(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::unassignUser(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::vector<pm::types::User> users =
 		pm::dal::UserStore::getAllUsers(conn, user);

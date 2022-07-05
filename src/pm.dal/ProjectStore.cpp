@@ -26,8 +26,7 @@ std::vector<pm::types::Project> pm::dal::ProjectStore::getAllProjects(
 {
 	nanodbc::statement statement(conn);
 	nanodbc::prepare(statement, NANODBC_TEXT(R"(
-    SELECT *
-    FROM Projects}
+	SELECT * FROM Projects
     )"));
 
 	auto result = execute(statement);
@@ -61,4 +60,51 @@ std::vector<pm::types::Project> pm::dal::ProjectStore::getAllProjects(
 	}
 
 	return projects;
+}
+
+void pm::dal::ProjectStore::updateProjectDescription(
+	nanodbc::connection& conn, pm::types::User& user,
+	size_t& id, std::string& description)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Projects]
+		SET description = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, description.c_str());
+	stmt.bind(1, &id);
+
+	execute(stmt);
+
+	pm::bll::ProjectManager::projectDescriptionChanged(conn, user);
+}
+
+void pm::dal::ProjectStore::updateProjectTitle(
+	nanodbc::connection& conn, pm::types::User& user, size_t& id,
+	std::string& title)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+		UPDATE [dbo].[Projects]
+		SET title = ?, lastChange = GETDATE()
+		WHERE id = ?)"));
+	stmt.bind(0, title.c_str());
+	stmt.bind(1, &id);
+
+	execute(stmt);
+
+	pm::bll::ProjectManager::projectTitleChanged(conn, user);
+}
+
+void pm::dal::ProjectStore::deleteProjectById(
+	nanodbc::connection& conn, pm::types::User& user, size_t& id)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, R"(
+		DELETE FROM [dbo].[Projects]
+		WHERE id = ?)");
+	stmt.bind(0, &id);
+	execute(stmt);
+
+	pm::bll::ProjectManager::projectDeleted(conn, user);
 }

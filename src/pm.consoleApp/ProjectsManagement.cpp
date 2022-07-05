@@ -37,7 +37,8 @@ pm::types::Project pm::pl::ProjectsManagement::getProject(
 	return project;
 }
 
-void pm::pl::ProjectsManagement::projectCreated(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::ProjectsManagement::projectCreated(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Project created successfully!\n";
 	std::cout << "Manage Project? (y/n)\n";
@@ -46,7 +47,8 @@ void pm::pl::ProjectsManagement::projectCreated(nanodbc::connection& conn, pm::t
 
 	if (answer == 'y')
 	{
-		pm::pl::ProjectsManagement::displayProjectsManagement(conn, user);
+		pm::pl::ProjectsManagement::displayProjectsManagement(
+			conn, user);
 	}
 	else
 	{
@@ -69,10 +71,12 @@ void pm::pl::ProjectsManagement::displayProjectsManagement(
 
 	unsigned short int option{};
 	std::cin >> option;
-	pm::pl::ProjectsManagement::handleProjectsManagement(conn, user, option);
+	pm::pl::ProjectsManagement::handleProjectsManagement(
+		conn, user, option);
 }
 
-void pm::pl::ProjectsManagement::handleProjectsManagement(nanodbc::connection& conn, pm::types::User& user,
+void pm::pl::ProjectsManagement::handleProjectsManagement(
+	nanodbc::connection& conn, pm::types::User& user,
 	unsigned short option)
 {
 	switch (option)
@@ -90,6 +94,30 @@ void pm::pl::ProjectsManagement::handleProjectsManagement(nanodbc::connection& c
 	case 6: displayProjectsMenu(conn, user);
 		break;
 	default: std::cerr << "Invalid input!" << std::endl;
+	}
+}
+
+void pm::pl::ProjectsManagement::handleProjectsMenu(
+	nanodbc::connection& conn, pm::types::User& user,
+	unsigned short int option)
+{
+	switch (option)
+	{
+	case 1:
+		pm::bll::ProjectManager::createProject(conn, user);
+		break;
+	case 2:
+		pm::bll::ProjectManager::deleteProject(conn, user);
+		break;
+	case 3:
+		displayProjectsManagement(conn, user);
+		break;
+	case 4:
+		pm::pl::MainMenu::displayAdminMenu(conn, user);
+		break;
+	default:
+		std::cout << "Invalid option\n";
+		break;
 	}
 }
 
@@ -126,7 +154,88 @@ void pm::pl::ProjectsManagement::displayProjects(
 	std::cout << table << std::endl;
 }
 
-void pm::pl::ProjectsManagement::projectsDisplayed(nanodbc::connection& conn, pm::types::User& user)
+size_t pm::pl::ProjectsManagement::getProjectId(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "\nEnter project ID: ";
+	size_t id{};
+	std::cin >> id;
+	return id;
+}
+
+std::string pm::pl::ProjectsManagement::getProjectDescription(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cin.get();
+	std::string description{};
+	std::cout<<"\nEnter the new description: ";
+	getline(std::cin, description);
+	return description;
+}
+
+std::string pm::pl::ProjectsManagement::getProjectTitle(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cin.get();
+	std::string description{};
+	std::cout << "\nEnter the new title: ";
+	getline(std::cin, description);
+	return description;
+}
+
+void pm::pl::ProjectsManagement::projectDeleted(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Project deleted successfully!\n";
+	std::cout << "View All Projects? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::ProjectManager::displayAllProjects(conn, user);
+	}
+	else
+	{
+		displayProjectsManagement(conn, user);
+	}
+}
+
+void pm::pl::ProjectsManagement::projectTitleChanged(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Title updated successfully!\n";
+	std::cout << "View All Projects? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::ProjectManager::displayAllProjects(conn, user);
+	}
+	else
+	{
+		displayProjectsManagement(conn, user);
+	}
+}
+
+void pm::pl::ProjectsManagement::projectDescriptionChanged(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout<<"Description updated successfully!\n";
+	std::cout<<"View All Projects? (y/n)\n";
+	char answer{};
+	std::cin>>answer;
+	if (answer == 'y')
+	{
+		pm::bll::ProjectManager::displayAllProjects(conn, user);
+	}
+	else
+	{
+		displayProjectsManagement(conn, user);
+	}
+}
+
+void pm::pl::ProjectsManagement::projectsDisplayed(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Go back? (y/n)\n";
 	char answer{};
@@ -139,29 +248,5 @@ void pm::pl::ProjectsManagement::projectsDisplayed(nanodbc::connection& conn, pm
 	else
 	{
 		displayProjectsMenu(conn, user);
-	}
-}
-
-void pm::pl::ProjectsManagement::handleProjectsMenu(
-	nanodbc::connection& conn, pm::types::User& user,
-	unsigned short int option)
-{
-	switch (option)
-	{
-	case 1:
-		pm::bll::ProjectManager::createProject(conn, user);
-		break;
-	case 2:
-		pm::bll::ProjectManager::deleteProject(conn, user);
-		break;
-	case 3:
-		displayProjectsManagement(conn, user);
-		break;
-	case 4:
-		pm::pl::MainMenu::displayAdminMenu(conn, user);
-		break;
-	default:
-		std::cout << "Invalid option\n";
-		break;
 	}
 }
