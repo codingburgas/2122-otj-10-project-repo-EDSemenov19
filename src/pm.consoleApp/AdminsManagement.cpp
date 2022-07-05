@@ -131,15 +131,15 @@ void pm::pl::AdminsManagement::displayUserDetails(nanodbc::connection& conn,
 	tabulate::Table table;
 
 	table.add_row({ "Id", "Name", "Surname", "Username",
-		"Email", "Age", "Is Admin", "Created On", "Last Changed" });
+		"Email", "Age", "Is Admin", "Created On", "Last Changed", "Created By" });
 	table.add_row({ std::to_string(selectedUser.id),
 		selectedUser.firstName, selectedUser.lastName,
 		selectedUser.username, selectedUser.email,
 		std::to_string(selectedUser.age),
 		std::to_string(selectedUser.isAdmin),
-		createdOn, lastChange });
+		createdOn, lastChange, std::to_string(selectedUser.creatorId) });
 
-	for (size_t i = 0; i < 9; ++i) {
+	for (size_t i = 0; i < 10; ++i) {
 		table[0][i].format()
 			.font_color(tabulate::Color::magenta)
 			.font_align(tabulate::FontAlign::center)

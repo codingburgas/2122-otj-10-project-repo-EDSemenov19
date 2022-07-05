@@ -22,6 +22,7 @@ void pm::bll::UserManager::registerNewUser(
 	short int age{};
 	std::string password{};
 	bool isAdmin{};
+	size_t creatorId{};
 
 	std::cin.get();
 	std::cout << "Add User" << std::endl;
@@ -40,15 +41,20 @@ void pm::bll::UserManager::registerNewUser(
 	std::getline(std::cin, password);
 	std::cout << "\nIs admin (1 or 0): ";
 	std::cin >> isAdmin;
+	creatorId = user.id;
 
-	pm::types::User newUser{};
-	newUser.firstName = firstName;
-	newUser.lastName = lastName;
-	newUser.username = username;
-	newUser.email = email;
-	newUser.age = age;
-	newUser.passwordHash = hashString(password);
-	newUser.isAdmin = isAdmin;
+	password = pm::bll::UserManager::hashString(password);
+
+	pm::types::User newUser{
+		firstName,
+		lastName,
+		username,
+		email,
+		age,
+		password,
+		isAdmin,
+		creatorId
+	};
 
 	pm::dal::UserStore::create(conn, user, newUser);
 
@@ -58,7 +64,7 @@ void pm::bll::UserManager::registerNewUser(
 bool pm::bll::UserManager::checkForNoUsers(nanodbc::connection& conn)
 {
 	nanodbc::result result = pm::dal::UserStore::getAllElements(conn);
-	return (result.rows() == 0) ? false : true;
+	return (result.rows() == 0) ? true : false;
 }
 
 pm::types::User pm::bll::UserManager::loginUser(
@@ -69,9 +75,9 @@ pm::types::User pm::bll::UserManager::loginUser(
 	if (pm::bll::UserManager::checkForNoUsers(conn)
 		&& username == "admin" && password == "adminpass")
 	{
-		return pm::types::User(
-			"admin", "admin", "admin@pm.com",
-			0, "adminpass", true);
+		return pm::types::User(0,"admin", "admin",
+			"adminadmin", "admin@pm.com", 0,
+			"adminpass", true);
 	}
 
 	if (!pm::dal::UserStore::checkByUsername(conn, username))

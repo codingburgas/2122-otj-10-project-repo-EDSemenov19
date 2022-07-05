@@ -2,15 +2,18 @@
 #include "UserStore.h"
 #include "UserManager.h"
 
-void pm::dal::UserStore::create(nanodbc::connection& conn, pm::types::User& user, pm::types::User& newUser)
+void pm::dal::UserStore::create(
+	nanodbc::connection& conn, pm::types::User& user,
+	pm::types::User& newUser)
 {
 	int isAdmin = newUser.isAdmin;
 
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
-	INSERT INTO [dbo].[Users] (firstName, lastName, username, email, age, passwordHash, createdOn, lastChange, isAdmin) 
+	INSERT INTO [dbo].[Users] (firstName, lastName, username, email, age,
+	 passwordHash, createdOn, lastChange, isAdmin, creatorId) 
 	VALUES 
-	(?, ?, ?, ?, ?, ?, GETDATE(), GETDATE(), ?))"));
+	(?, ?, ?, ?, ?, ?, GETDATE(), GETDATE(), ?, ?))"));
 
 	stmt.bind(0, newUser.firstName.c_str());
 	stmt.bind(1, newUser.lastName.c_str());
@@ -19,6 +22,7 @@ void pm::dal::UserStore::create(nanodbc::connection& conn, pm::types::User& user
 	stmt.bind(4, &newUser.age);
 	stmt.bind(5, newUser.passwordHash.c_str());
 	stmt.bind(6, &isAdmin);
+	stmt.bind(7, &newUser.creatorId);
 
 	nanodbc::execute(stmt);
 }
@@ -90,6 +94,7 @@ pm::types::User pm::dal::UserStore::getUserById(nanodbc::connection& conn, const
 		user.lastChange = getTime(lastChangeTP);
 
 		user.isAdmin = result.get<int>("isAdmin");
+		user.creatorId = result.get<size_t>("creatorId");
 	}
 
 	return user;
@@ -147,6 +152,7 @@ nanodbc::result pm::dal::UserStore::getAllElements(nanodbc::connection& conn)
      SELECT*
      FROM Users)"));
 
+	result.next();
 	return result;
 }
 
