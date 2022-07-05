@@ -168,7 +168,7 @@ std::string pm::pl::ProjectsManagement::getProjectDescription(
 {
 	std::cin.get();
 	std::string description{};
-	std::cout<<"\nEnter the new description: ";
+	std::cout << "\nEnter the new description: ";
 	getline(std::cin, description);
 	return description;
 }
@@ -181,6 +181,93 @@ std::string pm::pl::ProjectsManagement::getProjectTitle(
 	std::cout << "\nEnter the new title: ";
 	getline(std::cin, description);
 	return description;
+}
+
+void pm::pl::ProjectsManagement::teamUnassignedFromProject(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Team Unassigned successfully!\n";
+	std::cout << "View Teams Of Project? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::TeamManager::displayTeamsOfProject(conn, user);
+	}
+	else
+	{
+		displayProjectsManagement(conn, user);
+	}
+}
+
+void pm::pl::ProjectsManagement::displayProjectsAndTeams(nanodbc::connection& conn, pm::types::User& user,
+                                                         pm::types::Project& project, std::vector<pm::types::Team>& teams)
+{
+	system("cls");
+	tabulate::Table table;
+	table.add_row({ "ID", "Title", "Description",
+		"Created On" , "Created By", "Last Changed On",
+		"Last Changed By" });
+	char createdOn[26];
+	char lastChange[26];
+	ctime_s(createdOn, sizeof createdOn,
+		&project.createdOn);
+	ctime_s(lastChange, sizeof lastChange,
+		&project.lastChanged);
+
+	table.add_row({
+		std::to_string(project.id), project.title,
+		project.description, createdOn,
+		std::to_string(project.idOfCreator), lastChange,
+		std::to_string(project.idOfLastChanger) });
+
+	for (size_t i = 0; i < 7; ++i) {
+		table[0][i].format()
+			.font_color(tabulate::Color::magenta)
+			.font_align(tabulate::FontAlign::center)
+			.font_style({ tabulate::FontStyle::bold });
+	}
+	std::cout << table << std::endl;
+	std::cout << std::endl;
+	tabulate::Table table2;
+	table2.add_row({ "ID", "Team Name", "Created On",
+		"Created By" , "Last Changed On", "Last Changed By" });
+	for (const auto& element : teams)
+	{
+		char createdOn[26];
+		char lastChange[26];
+		ctime_s(createdOn, sizeof createdOn,
+			&element.createdOn);
+		ctime_s(lastChange, sizeof lastChange,
+			&element.lastChange);
+
+		table2.add_row({
+			std::to_string(element.id), element.title,
+			createdOn, std::to_string(element.creatorId),
+			lastChange, std::to_string(element.lastChangerId) });
+	}
+	for (size_t i = 0; i < 6; ++i) {
+		table2[0][i].format()
+			.font_color(tabulate::Color::yellow)
+			.font_align(tabulate::FontAlign::center)
+			.font_style({ tabulate::FontStyle::bold });
+	}
+	std::cout << table2 << std::endl;
+}
+
+void pm::pl::ProjectsManagement::teamAssignedToProject(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Team Assigned successfully!\n";
+	std::cout << "View Teams Of Project? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::TeamManager::displayTeamsOfProject(conn, user);
+	}
+	else
+	{
+		displayProjectsManagement(conn, user);
+	}
 }
 
 void pm::pl::ProjectsManagement::projectDeleted(
@@ -220,10 +307,10 @@ void pm::pl::ProjectsManagement::projectTitleChanged(
 void pm::pl::ProjectsManagement::projectDescriptionChanged(
 	nanodbc::connection& conn, pm::types::User& user)
 {
-	std::cout<<"Description updated successfully!\n";
-	std::cout<<"View All Projects? (y/n)\n";
+	std::cout << "Description updated successfully!\n";
+	std::cout << "View All Projects? (y/n)\n";
 	char answer{};
-	std::cin>>answer;
+	std::cin >> answer;
 	if (answer == 'y')
 	{
 		pm::bll::ProjectManager::displayAllProjects(conn, user);

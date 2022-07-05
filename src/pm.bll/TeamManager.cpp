@@ -11,6 +11,11 @@ void pm::bll::TeamManager::teamsForUserNotFound(nanodbc::connection& conn, pm::t
 	pm::pl::TeamsManagement::teamsForUserNotFound(conn, user);
 }
 
+void pm::bll::TeamManager::teamsForProjectNotFound(nanodbc::connection& conn, pm::types::User& user)
+{
+	pm::pl::TeamsManagement::teamsForProjectNotFound(conn, user);
+}
+
 void pm::bll::TeamManager::userAssignedToTeam(nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::userAssignedToTeam(conn, user);
@@ -27,8 +32,6 @@ void pm::bll::TeamManager::createTeam(
 	pm::types::Team team = pm::pl::TeamsManagement::getTeam(conn, user);
 	pm::dal::TeamStore::registerTeam(conn, user, team);
 }
-
-
 
 void pm::bll::TeamManager::deleteTeam(
 	nanodbc::connection& conn, pm::types::User& user)
@@ -80,6 +83,27 @@ void pm::bll::TeamManager::displayTeamsOfUser(
 void pm::bll::TeamManager::displayTeamsOfProject(
 	nanodbc::connection& conn, pm::types::User& user)
 {
+	std::vector<pm::types::Project> projects =
+		pm::dal::ProjectStore::getAllProjects(conn, user);
+	pm::pl::ProjectsManagement::displayProjects(
+		conn, user, projects);
+
+	size_t projectId =
+		pm::pl::ProjectsManagement::getProjectId(conn, user);
+
+	pm::types::Project project =
+		pm::dal::ProjectStore::getProjectById(conn, user, projectId);
+
+	std::vector<pm::types::Team> teams =
+		pm::dal::TeamStore::getTeamsOfProject(conn, user, projectId);
+
+	pm::pl::ProjectsManagement::displayProjectsAndTeams(
+		conn, user, project, teams);
+
+	//pm::pl::TeamsManagement::displayTeams(
+		//conn, user, teams);
+
+	pm::pl::TeamsManagement::teamsDisplayed(conn, user);
 }
 
 void pm::bll::TeamManager::assignUser(

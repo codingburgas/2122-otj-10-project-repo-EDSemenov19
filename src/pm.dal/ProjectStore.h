@@ -26,5 +26,14 @@ namespace pm::dal
 		void deleteProjectById(
 			nanodbc::connection& conn, pm::types::User& user,
 			size_t& id);
+		void assignTeam(
+			nanodbc::connection& conn, pm::types::User& user,
+			size_t& teamId, size_t& projectId);
+		pm::types::Project getProjectById(
+			nanodbc::connection& conn,
+			pm::types::User& user, size_t projectId);
+		void unassignTeam(
+			nanodbc::connection& conn, pm::types::User& user,
+			size_t& projectId, size_t& teamId);
 	}
 }

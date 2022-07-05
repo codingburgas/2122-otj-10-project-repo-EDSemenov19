@@ -5,7 +5,10 @@
 #include "../pm.consoleApp/AdminsManagement.h"
 #include "../pm.consoleApp/TeamsManagement.h"
 #include "../pm.dal/TeamStore.h"
+#include "../pm.bll/ProjectManager.h"
 #include "../../lib/nanodbc/nanodbc.h"
+#include "../pm.consoleapp/ProjectsManagement.h"
+#include "../pm.dal/ProjectStore.h"
 
 namespace pm::bll
 {
@@ -14,6 +17,8 @@ namespace pm::bll
 		void userDeleted(
 			nanodbc::connection& conn, pm::types::User& user);
 		void teamsForUserNotFound(
+			nanodbc::connection& conn, pm::types::User& user);
+		void teamsForProjectNotFound(
 			nanodbc::connection& conn, pm::types::User& user);
 		void userAssignedToTeam(
 			nanodbc::connection& conn, pm::types::User& user);

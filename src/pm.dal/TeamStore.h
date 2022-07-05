@@ -1,6 +1,5 @@
 #pragma once
 #include "pch.h"
-#include <iostream>
 #include "../pm.types/User.h"
 #include "../pm.types/Team.h"
 #include "../pm.bll/TeamManager.h"
@@ -27,5 +26,8 @@ namespace pm::dal
 			size_t& userId, size_t& teamId);
 		std::vector<pm::types::Team> getTeamsOfUser(
 			nanodbc::connection& conn, pm::types::User& user, size_t option);
+		std::vector<pm::types::Team> getTeamsOfProject(
+			nanodbc::connection& conn,
+			pm::types::User& user, size_t projectId);
 	}
 }

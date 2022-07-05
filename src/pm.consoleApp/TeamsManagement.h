@@ -18,6 +18,8 @@ namespace pm::pl
 			nanodbc::connection& conn, pm::types::User& user);
 		void teamsForUserNotFound(
 			nanodbc::connection& conn, pm::types::User& user);
+		void teamsForProjectNotFound(
+			nanodbc::connection& conn, pm::types::User& user);
 		void teamsDisplayed(
 			nanodbc::connection& conn, pm::types::User& user);
 		void userAssignedToTeam(

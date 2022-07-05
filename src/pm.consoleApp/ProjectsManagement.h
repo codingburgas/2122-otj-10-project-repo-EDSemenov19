@@ -20,6 +20,13 @@ namespace pm::pl
 			nanodbc::connection& conn, pm::types::User& user);
 		std::string getProjectTitle(
 			nanodbc::connection& conn, pm::types::User& user);
+		void teamUnassignedFromProject(
+			nanodbc::connection& conn, pm::types::User& user);
+		void displayProjectsAndTeams(
+			nanodbc::connection& conn, pm::types::User& user,
+			pm::types::Project& project, std::vector<pm::types::Team>& teams);
+		void teamAssignedToProject(
+			nanodbc::connection& conn, pm::types::User& user);
 		void projectDeleted(
 			nanodbc::connection& conn, pm::types::User& user);
 		void projectTitleChanged(

@@ -170,3 +170,37 @@ std::vector<pm::types::Team> pm::dal::TeamStore::getTeamsOfUser(
 	}
 	return teams;
 }
+
+std::vector<pm::types::Team> pm::dal::TeamStore::getTeamsOfProject(
+	nanodbc::connection& conn, pm::types::User& user,
+	size_t projectId)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+	SELECT * FROM [teams_projects]
+	WHERE projectId = ?)"));
+	stmt.bind(0, &projectId);
+	nanodbc::result result = execute(stmt);
+	nanodbc::result result1 = result;
+	result1.next();
+	std::vector<pm::types::Team> teams{};
+	if (result1.rows() == 0)
+	{
+		pm::bll::TeamManager::teamsForProjectNotFound(conn, user);
+	}
+
+	else
+	{
+		std::vector<size_t> teamIds{};
+		do {
+			teamIds.push_back(
+				result.get<size_t>("teamId"));
+		} while (result.next());
+
+		for (auto element : teamIds)
+		{
+			getTeamsById(conn, user, element, teams);
+		}
+	}
+	return teams;
+}

@@ -83,6 +83,22 @@ void pm::pl::TeamsManagement::teamsForUserNotFound(
 	}
 }
 
+void pm::pl::TeamsManagement::teamsForProjectNotFound(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Teams for Project not found!\n";
+	std::cout << "\nTry again? (y/n)";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::TeamManager::displayTeamsOfProject(conn, user);
+	}
+	else
+	{
+		pm::pl::TeamsManagement::displayTeamsManagement(conn, user);
+	}
+}
+
 void pm::pl::TeamsManagement::teamsDisplayed(
 	nanodbc::connection& conn, pm::types::User& user)
 {

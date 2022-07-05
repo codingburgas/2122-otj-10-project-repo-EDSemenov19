@@ -108,3 +108,78 @@ void pm::dal::ProjectStore::deleteProjectById(
 
 	pm::bll::ProjectManager::projectDeleted(conn, user);
 }
+
+void pm::dal::ProjectStore::assignTeam(nanodbc::connection& conn, pm::types::User& user, size_t& projectId,
+	size_t& teamId)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+	INSERT INTO [dbo].[teams_projects] (teamId, projectId)
+	VALUES (?, ?))"));
+	stmt.bind(0, &teamId);
+	stmt.bind(1, &projectId);
+	execute(stmt);
+
+	pm::bll::ProjectManager::teamAssignedToProject(conn, user);
+}
+
+pm::types::Project pm::dal::ProjectStore::getProjectById(
+	nanodbc::connection& conn, pm::types::User& user,
+	size_t projectId)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
+	SELECT * FROM Projects
+	WHERE id = ?
+    )"));
+
+	stmt.bind(0, &projectId);
+	auto result = execute(stmt);
+	
+	if (result.next())
+	{
+		auto id = result.get<int>("id");
+		auto title =
+			result.get<std::string>("title");
+		auto description =
+			result.get<std::string>("description");
+		auto m_createdOn =
+			result.get<nanodbc::timestamp>("createdOn");
+		auto creatorId =
+			result.get<int>("IdOfCreator");
+		auto m_lastChange =
+			result.get<nanodbc::timestamp>("lastChange");
+		auto lastChangerId =
+			result.get<int>("idOfLastChanger");
+
+		auto createdOn =
+			pm::dal::UserStore::getTime(m_createdOn);
+		auto lastChange =
+			pm::dal::UserStore::getTime(m_lastChange);
+
+
+		pm::types::Project project(
+			id, title, description, createdOn,
+			creatorId, lastChange, lastChangerId);
+		return project;
+	}
+	else
+	{
+		throw std::runtime_error("Project not found");
+	}
+}
+
+void pm::dal::ProjectStore::unassignTeam(
+	nanodbc::connection& conn, pm::types::User& user,
+	size_t& projectId, size_t& teamId)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, R"(
+		DELETE FROM [dbo].[teams_projects]
+		WHERE projectId = ? AND teamId = ?)");
+	stmt.bind(0, &projectId);
+	stmt.bind(1, &teamId);
+	execute(stmt);
+
+	pm::bll::ProjectManager::teamUnassignedFromProject(conn, user);
+}
