@@ -16,8 +16,9 @@ void pm::dal::TeamStore::unassignUser(
 	pm::bll::TeamManager::userDeleted(conn, user);
 }
 
-void pm::dal::TeamStore::getTeamsById(nanodbc::connection& conn, pm::types::User user,
-                                      size_t teamId, std::vector<pm::types::Team>& teams)
+void pm::dal::TeamStore::getTeamsById(
+	nanodbc::connection& conn, pm::types::User user,
+	size_t teamId, std::vector<pm::types::Team>& teams)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, R"(
@@ -27,14 +28,18 @@ void pm::dal::TeamStore::getTeamsById(nanodbc::connection& conn, pm::types::User
 	nanodbc::result result = execute(stmt);
 	while (result.next())
 	{
-		auto id = result.get<int>("id");
-		auto title = result.get<std::string>("title");
+		auto id =
+			result.get<int>("id");
+		auto title =
+			result.get<std::string>("title");
 		auto m_createdOn =
 			result.get<nanodbc::timestamp>("createdOn");
-		auto creatorId = result.get<int>("creatorId");
+		auto creatorId =
+			result.get<int>("creatorId");
 		auto m_lastChange =
 			result.get<nanodbc::timestamp>("lastChange");
-		auto lastChangerId = result.get<int>("lastChangerId");
+		auto lastChangerId =
+			result.get<int>("lastChangerId");
 
 		auto createdOn =
 			pm::dal::UserStore::getTime(m_createdOn);
@@ -80,13 +85,16 @@ std::vector<pm::types::Team> pm::dal::TeamStore::getTeams(
 	while (result.next())
 	{
 		auto id = result.get<int>("id");
-		auto title = result.get<std::string>("title");
+		auto title =
+			result.get<std::string>("title");
 		auto m_createdOn =
 			result.get<nanodbc::timestamp>("createdOn");
-		auto creatorId = result.get<int>("creatorId");
+		auto creatorId =
+			result.get<int>("creatorId");
 		auto m_lastChange =
 			result.get<nanodbc::timestamp>("lastChange");
-		auto lastChangerId = result.get<int>("lastChangerId");
+		auto lastChangerId =
+			result.get<int>("lastChangerId");
 
 		auto createdOn =
 			pm::dal::UserStore::getTime(m_createdOn);
@@ -151,7 +159,8 @@ std::vector<pm::types::Team> pm::dal::TeamStore::getTeamsOfUser(
 	{
 		std::vector<size_t> teamIds{};
 		do {
-			teamIds.push_back(result.get<size_t>("teamId"));
+			teamIds.push_back(
+				result.get<size_t>("teamId"));
 		} while (result.next());
 
 		for (auto element : teamIds)

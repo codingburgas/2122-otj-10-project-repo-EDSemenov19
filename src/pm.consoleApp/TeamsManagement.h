@@ -46,7 +46,9 @@ namespace pm::pl
 		void handleTeamsView(
 			nanodbc::connection& conn, pm::types::User& user,
 			unsigned short option);
-		int getUserId(nanodbc::connection& conn, pm::types::User& user, std::vector<types::User>& users);
-		int getTeamId(nanodbc::connection& conn, pm::types::User& user, std::vector<types::Team>& teams);
+		int getUserId(nanodbc::connection& conn, pm::types::User& user,
+			std::vector<types::User>& users);
+		int getTeamId(nanodbc::connection& conn, pm::types::User& user,
+			std::vector<types::Team>& teams);
 	};
 }

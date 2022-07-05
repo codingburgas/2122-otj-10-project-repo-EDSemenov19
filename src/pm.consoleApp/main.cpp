@@ -29,7 +29,7 @@ int main() try
 	Server=PCBURGAS;
 	Database=PMDB;
 	Trusted_Connection=yes;
-	MARS_Connection=Yes)"); // an ODBC connection string to your database
+	MARS_Connection=Yes)"); // an ODBC connection string to (MARS) your database
 	nanodbc::connection conn(connstr);
 
 	app.run(conn);
