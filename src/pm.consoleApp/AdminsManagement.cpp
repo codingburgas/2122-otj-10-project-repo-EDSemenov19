@@ -131,13 +131,15 @@ void pm::pl::AdminsManagement::displayUserDetails(nanodbc::connection& conn,
 	tabulate::Table table;
 
 	table.add_row({ "Id", "Name", "Surname", "Username",
-		"Email", "Age", "Is Admin", "Created On", "Last Changed", "Created By" });
+		"Email", "Age", "Is Admin", "Created On",
+		"Last Changed", "Created By" });
 	table.add_row({ std::to_string(selectedUser.id),
 		selectedUser.firstName, selectedUser.lastName,
 		selectedUser.username, selectedUser.email,
 		std::to_string(selectedUser.age),
 		std::to_string(selectedUser.isAdmin),
-		createdOn, lastChange, std::to_string(selectedUser.creatorId) });
+		createdOn, lastChange,
+		std::to_string(selectedUser.creatorId) });
 
 	for (size_t i = 0; i < 10; ++i) {
 		table[0][i].format()
@@ -301,7 +303,8 @@ void pm::pl::AdminsManagement::getNewAge(pm::types::User& selectedUser)
 	std::cout << "current age" << ": " << selectedUser.age << '\n';
 }
 
-void pm::pl::AdminsManagement::getNewAdminStatus(pm::types::User& selectedUser)
+void pm::pl::AdminsManagement::getNewAdminStatus(
+	pm::types::User& selectedUser)
 {
 	system("cls");
 	if (selectedUser.isAdmin)

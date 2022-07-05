@@ -36,7 +36,6 @@ namespace pm::pl
 			pm::types::User selectedUser);
 		void displayAdminPanel(
 			nanodbc::connection& conn, pm::types::User& user);
-		//void getUsersToView(nanodbc::connection& conn, pm::types::User& user);
 		void handleAdminsManagement(
 			nanodbc::connection& conn, pm::types::User& user,
 			unsigned short int& option);

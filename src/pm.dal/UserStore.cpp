@@ -27,10 +27,10 @@ void pm::dal::UserStore::create(
 	nanodbc::execute(stmt);
 }
 
-void pm::dal::UserStore::getUsersToView(nanodbc::connection& conn, pm::types::User& user)
+void pm::dal::UserStore::getUsersToView(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	nanodbc::statement stmt(conn);
-	//std::cout << user.id << " -> " << foundUser.firstName << ' ' << foundUser.lastName << std::endl;
 }
 
 
@@ -50,7 +50,8 @@ time_t pm::dal::UserStore::getTime(nanodbc::timestamp& ts1)
 }
 
 
-bool pm::dal::UserStore::checkByUsername(nanodbc::connection& conn, std::string username)
+bool pm::dal::UserStore::checkByUsername(
+	nanodbc::connection& conn, std::string username)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, R"(
@@ -68,7 +69,8 @@ bool pm::dal::UserStore::checkByUsername(nanodbc::connection& conn, std::string 
 	return true;
 }
 
-pm::types::User pm::dal::UserStore::getUserById(nanodbc::connection& conn, const unsigned short int option)
+pm::types::User pm::dal::UserStore::getUserById(
+	nanodbc::connection& conn, const unsigned short int option)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, R"(
@@ -86,10 +88,13 @@ pm::types::User pm::dal::UserStore::getUserById(nanodbc::connection& conn, const
 		user.username = result.get<std::string>("username");
 		user.email = result.get<std::string>("email");
 		user.age = result.get<size_t>("age");
-		user.passwordHash = result.get<std::string>("passwordHash");
+		user.passwordHash =
+			result.get<std::string>("passwordHash");
 
-		auto createdOnTP = result.get<nanodbc::timestamp>("createdOn");
-		auto lastChangeTP = result.get<nanodbc::timestamp>("lastChange");
+		auto createdOnTP =
+			result.get<nanodbc::timestamp>("createdOn");
+		auto lastChangeTP =
+			result.get<nanodbc::timestamp>("lastChange");
 		user.createdOn = getTime(createdOnTP);
 		user.lastChange = getTime(lastChangeTP);
 
@@ -100,7 +105,8 @@ pm::types::User pm::dal::UserStore::getUserById(nanodbc::connection& conn, const
 	return user;
 }
 
-pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc::connection& conn)
+pm::types::User pm::dal::UserStore::getByUsername(
+	std::string username, nanodbc::connection& conn)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, R"(
@@ -112,7 +118,8 @@ pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc:
 
 	if (result.rows() == 0)
 	{
-		throw std::range_error(std::string("Incorrect username or password!"));
+		throw std::range_error(std::string(
+			"Incorrect username or password!"));
 	}
 
 	pm::types::User user;
@@ -123,10 +130,13 @@ pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc:
 		user.username = result.get<std::string>("username");
 		user.email = result.get<std::string>("email");
 		user.age = result.get<size_t>("age");
-		user.passwordHash = result.get<std::string>("passwordHash");
+		user.passwordHash =
+			result.get<std::string>("passwordHash");
 
-		auto createdOnTP = result.get<nanodbc::timestamp>("createdOn");
-		auto lastChangeTP = result.get<nanodbc::timestamp>("lastChange");
+		auto createdOnTP =
+			result.get<nanodbc::timestamp>("createdOn");
+		auto lastChangeTP =
+			result.get<nanodbc::timestamp>("lastChange");
 		user.createdOn = getTime(createdOnTP);
 		user.lastChange = getTime(lastChangeTP);
 
@@ -136,7 +146,9 @@ pm::types::User pm::dal::UserStore::getByUsername(std::string username, nanodbc:
 	return user;
 }
 
-void pm::dal::UserStore::deleteUser(nanodbc::connection& conn, pm::types::User& user, pm::types::User& userToDelete)
+void pm::dal::UserStore::deleteUser(
+	nanodbc::connection& conn, pm::types::User& user,
+	pm::types::User& userToDelete)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, R"(
@@ -233,7 +245,7 @@ void pm::dal::UserStore::updateFirstName(nanodbc::connection& conn,
 	pm::types::User& user, pm::types::User& selectedUser)
 {
 	nanodbc::statement stmt(conn);
-	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
 		UPDATE [dbo].[Users]
 		SET firstName = ?, lastChange = GETDATE()
 		WHERE id = ?)"));
@@ -332,7 +344,7 @@ void pm::dal::UserStore::updateAdminStatus(nanodbc::connection& conn,
 }
 
 std::vector<pm::types::User> pm::dal::UserStore::sortByFirstName(
-	nanodbc::connection & conn, pm::types::User & user)
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
@@ -348,7 +360,7 @@ std::vector<pm::types::User> pm::dal::UserStore::sortByLastName(
 	nanodbc::connection& conn, pm::types::User& user)
 {
 	nanodbc::statement stmt(conn);
-	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
 		SELECT *
 		FROM Users
 		ORDER BY lastName)"));
@@ -361,7 +373,7 @@ std::vector<pm::types::User> pm::dal::UserStore::sortByUsername(
 	nanodbc::connection& conn, pm::types::User& user)
 {
 	nanodbc::statement stmt(conn);
-	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
 		SELECT *
 		FROM Users
 		ORDER BY username)"));
@@ -374,7 +386,7 @@ std::vector<pm::types::User> pm::dal::UserStore::sortByEmail(
 	nanodbc::connection& conn, pm::types::User& user)
 {
 	nanodbc::statement stmt(conn);
-	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
 		SELECT *
 		FROM Users
 		ORDER BY email)"));
@@ -387,7 +399,7 @@ std::vector<pm::types::User> pm::dal::UserStore::sortByAge(
 	nanodbc::connection& conn, pm::types::User& user)
 {
 	nanodbc::statement stmt(conn);
-	nanodbc::prepare (stmt, NANODBC_TEXT(R"(
+	nanodbc::prepare(stmt, NANODBC_TEXT(R"(
 		SELECT *
 		FROM Users
 		ORDER BY age)"));

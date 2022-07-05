@@ -109,7 +109,8 @@ void pm::dal::ProjectStore::deleteProjectById(
 	pm::bll::ProjectManager::projectDeleted(conn, user);
 }
 
-void pm::dal::ProjectStore::assignTeam(nanodbc::connection& conn, pm::types::User& user, size_t& projectId,
+void pm::dal::ProjectStore::assignTeam(
+	nanodbc::connection& conn, pm::types::User& user, size_t& projectId,
 	size_t& teamId)
 {
 	nanodbc::statement stmt(conn);
@@ -135,7 +136,7 @@ pm::types::Project pm::dal::ProjectStore::getProjectById(
 
 	stmt.bind(0, &projectId);
 	auto result = execute(stmt);
-	
+
 	if (result.next())
 	{
 		auto id = result.get<int>("id");

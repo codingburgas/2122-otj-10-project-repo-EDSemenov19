@@ -1,27 +1,32 @@
 #include "pch.h"
 #include "TeamManager.h"
 
-void pm::bll::TeamManager::userDeleted(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::userDeleted(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::userDeleted(conn, user);
 }
 
-void pm::bll::TeamManager::teamsForUserNotFound(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::teamsForUserNotFound(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::teamsForUserNotFound(conn, user);
 }
 
-void pm::bll::TeamManager::teamsForProjectNotFound(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::teamsForProjectNotFound(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::teamsForProjectNotFound(conn, user);
 }
 
-void pm::bll::TeamManager::userAssignedToTeam(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::userAssignedToTeam(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::userAssignedToTeam(conn, user);
 }
 
-void pm::bll::TeamManager::teamDeletedSuccessfully(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TeamManager::teamDeletedSuccessfully(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::teamDeletedSuccessfully(conn, user);
 }
@@ -29,14 +34,15 @@ void pm::bll::TeamManager::teamDeletedSuccessfully(nanodbc::connection& conn, pm
 void pm::bll::TeamManager::createTeam(
 	nanodbc::connection& conn, pm::types::User& user)
 {
-	pm::types::Team team = pm::pl::TeamsManagement::getTeam(conn, user);
+	pm::types::Team team = pm::pl::TeamsManagement::getTeam(
+		conn, user);
 	pm::dal::TeamStore::registerTeam(conn, user, team);
 }
 
 void pm::bll::TeamManager::deleteTeam(
 	nanodbc::connection& conn, pm::types::User& user)
 {
-	std::vector<pm::types::Team> teams = 
+	std::vector<pm::types::Team> teams =
 		pm::dal::TeamStore::getTeams(conn, user);
 	pm::pl::TeamsManagement::displayTeams(
 		conn, user, teams);
@@ -71,7 +77,7 @@ void pm::bll::TeamManager::displayTeamsOfUser(
 	size_t userId =
 		pm::pl::TeamsManagement::getUserId(conn, user, users);
 
-	std::vector<pm::types::Team> teams = 
+	std::vector<pm::types::Team> teams =
 		pm::dal::TeamStore::getTeamsOfUser(conn, user, userId);
 
 	pm::pl::TeamsManagement::displayTeams(
@@ -111,7 +117,7 @@ void pm::bll::TeamManager::assignUser(
 {
 	std::vector<pm::types::User> users =
 		pm::dal::UserStore::getAllUsers(conn, user);
-	size_t userId = 
+	size_t userId =
 		pm::pl::TeamsManagement::getUserId(conn, user, users);
 
 	std::vector<pm::types::Team> teams =

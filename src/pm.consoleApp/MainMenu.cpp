@@ -51,6 +51,9 @@ void pm::pl::MainMenu::displayUserMenu(nanodbc::connection& conn,
 	std::cout << "User menu! \n";
 	std::cout << "Welcome " << user.firstName << ' ' << user.lastName
 		<< '!' << '\n';
+	std::cout <<
+		"I Apologize Unreservedly, but user menu is not yet implemented!"
+		<< '\n';
 	std::cin.get();
 }
 

@@ -4,12 +4,14 @@
 #include "../pm.dal/ProjectStore.h"
 
 
-void pm::bll::ProjectManager::teamUnassignedFromProject(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::ProjectManager::teamUnassignedFromProject(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::ProjectsManagement::teamUnassignedFromProject(conn, user);
 }
 
-void pm::bll::ProjectManager::teamAssignedToProject(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::ProjectManager::teamAssignedToProject(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::ProjectsManagement::teamAssignedToProject(conn, user);
 }
@@ -118,7 +120,7 @@ void pm::bll::ProjectManager::assignTeam(
 {
 	std::vector<pm::types::Team> teams =
 		pm::dal::TeamStore::getTeams(conn, user);
-	size_t teamId = 
+	size_t teamId =
 		pm::pl::TeamsManagement::getTeamId(conn, user, teams);
 
 	std::vector<pm::types::Project> projects =
@@ -126,7 +128,7 @@ void pm::bll::ProjectManager::assignTeam(
 	pm::pl::ProjectsManagement::displayProjects(
 		conn, user, projects);
 
-	size_t projectId = 
+	size_t projectId =
 		pm::pl::ProjectsManagement::getProjectId(conn, user);
 
 	pm::dal::ProjectStore::assignTeam(

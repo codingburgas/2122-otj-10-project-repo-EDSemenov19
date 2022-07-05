@@ -8,19 +8,6 @@
 #include "../../lib/nanodbc/nanodbc.h"
 #include "login.h"
 
-
-/*void listRegisteredUsers()
-{
-	auto users = userManager.getRegisteredUsers();
-	std::cout << "-----\n";
-	for (auto user : users)
-	{
-	   std::cout << user.id << " " << user.firstName
-			<< " " << user.lastName << " " << user.email
-			<< " " << std::hex << user.passwordHash << std::endl;
-	}
-}*/
-
 int main() try
 {
 	pm::pl::Application app;

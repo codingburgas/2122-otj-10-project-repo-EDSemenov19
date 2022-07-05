@@ -151,7 +151,8 @@ void pm::pl::TeamsManagement::teamDeletedSuccessfully(
 	}
 }
 
-void pm::pl::TeamsManagement::displayTeams(nanodbc::connection& connection, pm::types::User& user,
+void pm::pl::TeamsManagement::displayTeams(
+	nanodbc::connection& connection, pm::types::User& user,
 	std::vector<pm::types::Team>& teams)
 {
 	system("cls");
