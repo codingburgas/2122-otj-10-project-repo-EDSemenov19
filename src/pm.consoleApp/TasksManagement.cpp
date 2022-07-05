@@ -14,7 +14,8 @@ size_t pm::pl::TasksManagement::getTaskId(
 	return option;
 }
 
-void pm::pl::TasksManagement::taskDescriptionChanged(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TasksManagement::taskDescriptionChanged(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Description changed successfully!\n";
 	std::cout << "View Tasks? (y/n)\n";
@@ -31,6 +32,57 @@ void pm::pl::TasksManagement::taskDescriptionChanged(nanodbc::connection& conn, 
 	}
 }
 
+void pm::pl::TasksManagement::tasksForProjectNotFound(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Tasks for Project not found!\n";
+	std::cout << "\nTry again? (y/n)";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::TaskManager::displayTasksOfProject(conn, user);
+	}
+	else
+	{
+		pm::pl::TasksManagement::displayTasksManagement(conn, user);
+	}
+}
+
+void pm::pl::TasksManagement::taskUnassignedFromProject(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Task Unassigned successfully!\n";
+	std::cout << "View Tasks Of Project? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::TaskManager::displayTasksOfProject(conn, user);
+	}
+	else
+	{
+		displayTasksManagement(conn, user);
+	}
+}
+
+void pm::pl::TasksManagement::taskAssignedToProject(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Task Assigned successfully!\n";
+	std::cout << "View Tasks Of Project? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::bll::TaskManager::displayTasksOfProject(conn, user);
+	}
+	else
+	{
+		displayTasksManagement(conn, user);
+	}
+}
+
 void pm::pl::TasksManagement::displayTasks(
 	nanodbc::connection& conn, pm::types::User& user,
 	std::vector<pm::types::Task>& tasks)
@@ -38,7 +90,8 @@ void pm::pl::TasksManagement::displayTasks(
 	system("cls");
 	tabulate::Table table;
 	table.add_row({ "ID", "Title", "Description",
-		"Created On" , "Created By", "Last Changed On", "Last Changed By" });
+		"Created On" , "Created By", "Last Changed On",
+		"Last Changed By" });
 	for (const auto& element : tasks)
 	{
 		char createdOn[26];
@@ -63,7 +116,8 @@ void pm::pl::TasksManagement::displayTasks(
 	std::cout << table << std::endl;
 }
 
-void pm::pl::TasksManagement::taskTitleChanged(nanodbc::connection& conn, pm::types::User user)
+void pm::pl::TasksManagement::taskTitleChanged(
+	nanodbc::connection& conn, pm::types::User user)
 {
 	std::cout << "Title changed successfully!\n";
 	std::cout << "View Tasks? (y/n)\n";
@@ -80,7 +134,8 @@ void pm::pl::TasksManagement::taskTitleChanged(nanodbc::connection& conn, pm::ty
 	}
 }
 
-void pm::pl::TasksManagement::taskCreated(nanodbc::connection& conn, pm::types::User user)
+void pm::pl::TasksManagement::taskCreated(
+	nanodbc::connection& conn, pm::types::User user)
 {
 	std::cout << "Task created!" << std::endl;
 	std::cout << "Go back? (y/n)\n";
@@ -96,7 +151,8 @@ void pm::pl::TasksManagement::taskCreated(nanodbc::connection& conn, pm::types::
 	}
 }
 
-void pm::pl::TasksManagement::tasksDisplayed(nanodbc::connection& conn, pm::types::User user)
+void pm::pl::TasksManagement::tasksDisplayed(
+	nanodbc::connection& conn, pm::types::User user)
 {
 	std::cout << "Go back? (y/n)\n";
 	std::cout << "Answer: ";
@@ -112,7 +168,8 @@ void pm::pl::TasksManagement::tasksDisplayed(nanodbc::connection& conn, pm::type
 	}
 }
 
-std::string pm::pl::TasksManagement::getNewTaskTitle(nanodbc::connection& conn, pm::types::User& user,
+std::string pm::pl::TasksManagement::getNewTaskTitle(
+	nanodbc::connection& conn, pm::types::User& user,
 	std::vector<pm::types::Task>& tasks)
 {
 	system("cls");
@@ -124,7 +181,8 @@ std::string pm::pl::TasksManagement::getNewTaskTitle(nanodbc::connection& conn, 
 	return newTitle;
 }
 
-std::string pm::pl::TasksManagement::getNewDescription(nanodbc::connection& conn, pm::types::User& user,
+std::string pm::pl::TasksManagement::getNewDescription(
+	nanodbc::connection& conn, pm::types::User& user,
 	std::vector<pm::types::Task>& tasks)
 {
 	system("cls");
@@ -144,8 +202,9 @@ void pm::pl::TasksManagement::displayTasksManagement(
 	std::cout << "1. Create Task\n";
 	std::cout << "2. Delete Task\n";
 	std::cout << "3. Display All Tasks\n";
-	std::cout << "4. Edit task\n";
-	std::cout << "5. Back\n\nOption: ";
+	std::cout << "4. Display Tasks of A Project\n";
+	std::cout << "5. Edit task\n";
+	std::cout << "6. Back\n\nOption: ";
 
 	unsigned short int option{};
 	std::cin >> option;
@@ -154,13 +213,14 @@ void pm::pl::TasksManagement::displayTasksManagement(
 }
 
 size_t pm::pl::TasksManagement::displayEditMenu(nanodbc::connection& conn,
-                                                pm::types::User user)
+	pm::types::User user)
 {
 	std::cout << std::endl;
 	std::cout << "1. Edit Title\n";
 	std::cout << "2. Edit Description\n";
 	std::cout << "3. Assign Task to Project\n";
 	std::cout << "4. Unassign Task from Project\n";
+	std::cout << "5. Back\n\nOption: ";
 
 	size_t option{};
 	std::cin >> option;
@@ -182,16 +242,19 @@ void pm::pl::TasksManagement::handleTaskManagement(
 	case 3:
 		pm::bll::TaskManager::displayAllTasks(conn, user);
 		break;
-	case 4:
-		pm::bll::TaskManager::editTask(conn, user);
+	case 4: pm::bll::TaskManager::displayTasksOfProject(conn, user);
 		break;
 	case 5:
+		pm::bll::TaskManager::editTask(conn, user);
+		break;
+	case 6:
 		pm::pl::MainMenu::displayAdminMenu(conn, user);
 		break;
 	}
 }
 
-void pm::pl::TasksManagement::taskDeleted(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TasksManagement::taskDeleted(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Task deleted successfully!\n";
 	std::cout << "View Tasks? (y/n)\n";
@@ -208,7 +271,8 @@ void pm::pl::TasksManagement::taskDeleted(nanodbc::connection& conn, pm::types::
 	}
 }
 
-pm::types::Task pm::pl::TasksManagement::getTask(nanodbc::connection& conn, pm::types::User user)
+pm::types::Task pm::pl::TasksManagement::getTask(
+	nanodbc::connection& conn, pm::types::User user)
 {
 	std::string title{};
 	std::string description{};

@@ -18,6 +18,12 @@ namespace pm::pl
 			std::vector<pm::types::Task>& tasks);
 		void taskDescriptionChanged(
 			nanodbc::connection& conn, pm::types::User& user);
+		void tasksForProjectNotFound(
+			nanodbc::connection& conn, pm::types::User& user);
+		void taskUnassignedFromProject(
+			nanodbc::connection& conn, pm::types::User& user);
+		void taskAssignedToProject(
+			nanodbc::connection& conn, pm::types::User& user);
 		void displayTasks(
 			nanodbc::connection& conn, pm::types::User& user,
 			std::vector<pm::types::Task>& tasks);

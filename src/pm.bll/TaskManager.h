@@ -4,12 +4,21 @@
 #include "../pm.types/Task.h"
 #include "../pm.consoleapp/TasksManagement.h"
 #include "../pm.dal/TaskStore.h"
+#include "../pm.bll/ProjectManager.h"
 
 
 namespace pm::bll
 {
 	namespace TaskManager
 	{
+		void tasksForProjectNotFound(
+			nanodbc::connection& connection, pm::types::User& user);
+		void displayTasksOfProject(
+			nanodbc::connection& connection, pm::types::User& user);
+		void taskUnassignedFromProject(
+			nanodbc::connection& connection, pm::types::User& user);
+		void taskAssignedToProject(
+			nanodbc::connection& connection, pm::types::User& user);
 		void taskDescriptionChanged(
 			nanodbc::connection& connection, pm::types::User& user);
 		void taskTitleChanged(
@@ -26,10 +35,10 @@ namespace pm::bll
 			nanodbc::connection& connection, pm::types::User& user);
 		void editTask(
 			nanodbc::connection& connection, pm::types::User& user);
-		void assignUser(
+		void assignTask(
 			nanodbc::connection& connection, pm::types::User& user,
 			std::vector<pm::types::Task>& tasks);
-		void unassignUser(
+		void unassignTask(
 			nanodbc::connection& connection, pm::types::User& user,
 			std::vector<pm::types::Task>& tasks);
 	}

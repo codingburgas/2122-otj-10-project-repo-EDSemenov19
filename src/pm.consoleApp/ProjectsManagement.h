@@ -2,6 +2,7 @@
 #include "../pm.types/MenuItem.h"
 #include "../../lib/nanodbc/nanodbc.h"
 #include "../pm.types/User.h"
+#include "../pm.types/Task.h"
 #include "../pm.bll/ProjectManager.h"
 #include "../pm.bll/UserManager.h"
 #include "MainMenu.h"
@@ -20,11 +21,16 @@ namespace pm::pl
 			nanodbc::connection& conn, pm::types::User& user);
 		std::string getProjectTitle(
 			nanodbc::connection& conn, pm::types::User& user);
+		void displayProjectsAndTasks(
+			nanodbc::connection& conn, pm::types::User& user,
+			pm::types::Project& project,
+			std::vector<pm::types::Task> tasks);
 		void teamUnassignedFromProject(
 			nanodbc::connection& conn, pm::types::User& user);
 		void displayProjectsAndTeams(
 			nanodbc::connection& conn, pm::types::User& user,
-			pm::types::Project& project, std::vector<pm::types::Team>& teams);
+			pm::types::Project& project,
+			std::vector<pm::types::Team>& teams);
 		void teamAssignedToProject(
 			nanodbc::connection& conn, pm::types::User& user);
 		void projectDeleted(

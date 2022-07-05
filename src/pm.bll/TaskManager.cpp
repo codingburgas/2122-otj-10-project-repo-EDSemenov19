@@ -1,6 +1,47 @@
 #include "pch.h"
 #include "TaskManager.h"
 
+void pm::bll::TaskManager::tasksForProjectNotFound(
+	nanodbc::connection& connection, pm::types::User& user)
+{
+	pm::pl::TasksManagement::tasksForProjectNotFound(connection, user);
+}
+
+void pm::bll::TaskManager::displayTasksOfProject(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	std::vector<pm::types::Project> projects =
+		pm::dal::ProjectStore::getAllProjects(conn, user);
+	pm::pl::ProjectsManagement::displayProjects(
+		conn, user, projects);
+	size_t projectId =
+		pm::pl::ProjectsManagement::getProjectId(conn, user);
+
+	pm::types::Project project =
+		pm::dal::ProjectStore::getProjectById(conn, user, projectId);
+
+	std::vector<pm::types::Task> tasks =
+		pm::dal::TaskStore::getTasksOfProject(conn, user, projectId);
+
+	pm::pl::ProjectsManagement::displayProjectsAndTasks(
+		conn, user, project, tasks);
+
+	pm::pl::TasksManagement::tasksDisplayed(conn, user);
+}
+
+void pm::bll::TaskManager::taskUnassignedFromProject(
+	nanodbc::connection& connection, pm::types::User& user)
+{
+	pm::pl::TasksManagement::taskUnassignedFromProject(
+		connection, user);
+}
+
+void pm::bll::TaskManager::taskAssignedToProject(
+	nanodbc::connection& connection, pm::types::User& user)
+{
+	pm::pl::TasksManagement::taskAssignedToProject(connection, user);
+}
+
 void pm::bll::TaskManager::taskDescriptionChanged(
 	nanodbc::connection& connection, pm::types::User& user)
 {
@@ -8,12 +49,14 @@ void pm::bll::TaskManager::taskDescriptionChanged(
 		connection, user);
 }
 
-void pm::bll::TaskManager::taskTitleChanged(nanodbc::connection& connection, pm::types::User& user)
+void pm::bll::TaskManager::taskTitleChanged(nanodbc::connection& connection,
+	pm::types::User& user)
 {
 	pm::pl::TasksManagement::taskTitleChanged(connection, user);
 }
 
-void pm::bll::TaskManager::displayAllTasks(nanodbc::connection& conn, pm::types::User& user)
+void pm::bll::TaskManager::displayAllTasks(nanodbc::connection& conn,
+	pm::types::User& user)
 {
 	std::vector<pm::types::Task> tasks =
 		pm::dal::TaskStore::getAllTasks(conn, user);
@@ -29,7 +72,8 @@ void pm::bll::TaskManager::taskDeleted(nanodbc::connection& connection,
 	pm::pl::TasksManagement::taskDeleted(connection, user);
 }
 
-void pm::bll::TaskManager::deleteTask(nanodbc::connection& connection, pm::types::User& user)
+void pm::bll::TaskManager::deleteTask(nanodbc::connection& connection,
+	pm::types::User& user)
 {
 	std::vector<pm::types::Task> tasks =
 		pm::dal::TaskStore::getAllTasks(connection, user);
@@ -84,23 +128,40 @@ void pm::bll::TaskManager::editTask(nanodbc::connection& conn,
 	pm::dal::TaskStore::updateTaskDescription(
 		conn, user, taskId, newDescription); }
 	break;
-	case 3: pm::bll::TaskManager::assignUser(conn, user, tasks);
+	case 3: pm::bll::TaskManager::assignTask(conn, user, tasks);
 		break;
-	case 4: pm::bll::TaskManager::unassignUser(conn, user, tasks);
+	case 4: pm::bll::TaskManager::unassignTask(conn, user, tasks);
+		break;
+	case 5:
+		pm::pl::TasksManagement::displayTasksManagement(conn, user);
 		break;
 	}
 }
 
-void pm::bll::TaskManager::assignUser(
-	nanodbc::connection& connection, pm::types::User& user,
+void pm::bll::TaskManager::assignTask(
+	nanodbc::connection& conn, pm::types::User& user,
 	std::vector<pm::types::Task>& tasks)
 {
+	std::vector<pm::types::Project> projects =
+		pm::dal::ProjectStore::getAllProjects(conn, user);
+	pm::pl::ProjectsManagement::displayProjects(
+		conn, user, projects);
+	size_t projectId =
+		pm::pl::ProjectsManagement::getProjectId(conn, user);
 
+	pm::dal::TaskStore::assignTask(conn, user, tasks, projectId);
 }
 
-void pm::bll::TaskManager::unassignUser(
-	nanodbc::connection& connection, pm::types::User& user,
+void pm::bll::TaskManager::unassignTask(
+	nanodbc::connection& conn, pm::types::User& user,
 	std::vector<pm::types::Task>& tasks)
 {
+	std::vector<pm::types::Project> projects =
+		pm::dal::ProjectStore::getAllProjects(conn, user);
+	pm::pl::ProjectsManagement::displayProjects(
+		conn, user, projects);
+	size_t projectId =
+		pm::pl::ProjectsManagement::getProjectId(conn, user);
 
+	pm::dal::TaskStore::unassignTask(conn, user, tasks, projectId);
 }
