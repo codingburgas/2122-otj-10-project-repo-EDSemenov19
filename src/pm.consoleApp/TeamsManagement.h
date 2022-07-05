@@ -14,6 +14,8 @@ namespace pm::pl
 	{
 		unsigned short int getTeamToDeleteId(nanodbc::connection& conn,
 			pm::types::User& user);
+		void userDeleted(
+			nanodbc::connection& conn, pm::types::User& user);
 		void teamsForUserNotFound(
 			nanodbc::connection& conn, pm::types::User& user);
 		void teamsDisplayed(

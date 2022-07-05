@@ -48,6 +48,22 @@ unsigned short pm::pl::TeamsManagement::getTeamToDeleteId(nanodbc::connection& c
 	return option;
 }
 
+void pm::pl::TeamsManagement::userDeleted(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "User unassigned successfully!\n";
+	std::cout << "\nGo back? (y/n)";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::pl::TeamsManagement::displayTeamsView(conn, user);
+	}
+	else
+	{
+		exit(0);
+	}
+}
+
 void pm::pl::TeamsManagement::teamsForUserNotFound(nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Teams for user not found!\n";

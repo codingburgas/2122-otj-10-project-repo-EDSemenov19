@@ -1,8 +1,23 @@
 #include "pch.h"
 #include "TeamStore.h"
 
+void pm::dal::TeamStore::unassignUser(
+	nanodbc::connection& conn, pm::types::User& user,
+	size_t userId, size_t teamId)
+{
+	nanodbc::statement stmt(conn);
+	nanodbc::prepare(stmt, R"(
+		DELETE FROM [dbo].[users_teams]
+		WHERE userId = ? AND teamId = ?)");
+	stmt.bind(0, &userId);
+	stmt.bind(1, &teamId);
+	execute(stmt);
+
+	pm::bll::TeamManager::userDeleted(conn, user);
+}
+
 void pm::dal::TeamStore::getTeamsById(nanodbc::connection& conn, pm::types::User user,
-	size_t teamId, std::vector<pm::types::Team>& teams)
+                                      size_t teamId, std::vector<pm::types::Team>& teams)
 {
 	nanodbc::statement stmt(conn);
 	nanodbc::prepare(stmt, R"(

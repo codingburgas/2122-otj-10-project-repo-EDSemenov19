@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "TeamManager.h"
 
+void pm::bll::TeamManager::userDeleted(nanodbc::connection& conn, pm::types::User& user)
+{
+	pm::pl::TeamsManagement::userDeleted(conn, user);
+}
+
 void pm::bll::TeamManager::teamsForUserNotFound(nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::teamsForUserNotFound(conn, user);
@@ -90,5 +95,15 @@ void pm::bll::TeamManager::assignUser(nanodbc::connection& conn, pm::types::User
 
 void pm::bll::TeamManager::unassignUser(nanodbc::connection& conn, pm::types::User& user)
 {
+	std::vector<pm::types::User> users =
+		pm::dal::UserStore::getAllUsers(conn, user);
+	size_t userId =
+		pm::pl::TeamsManagement::getUserId(conn, user, users);
 
+	std::vector<pm::types::Team> teams =
+		pm::dal::TeamStore::getTeams(conn, user);
+	size_t teamId =
+		pm::pl::TeamsManagement::getTeamId(conn, user, teams);
+
+	pm::dal::TeamStore::unassignUser(conn, user, userId, teamId);
 }

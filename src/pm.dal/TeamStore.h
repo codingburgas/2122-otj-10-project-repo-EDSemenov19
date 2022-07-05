@@ -10,9 +10,12 @@ namespace pm::dal
 {
 	namespace TeamStore
 	{
+		void unassignUser(
+			nanodbc::connection& conn, pm::types::User&,
+			size_t userId, size_t teamId);
 		void getTeamsById(nanodbc::connection& conn,
-		                  pm::types::User user, size_t teamId,
-		                  std::vector<pm::types::Team>& teams);
+			pm::types::User user, size_t teamId,
+			std::vector<pm::types::Team>& teams);
 		void registerTeam(
 			nanodbc::connection& conn, pm::types::User& user,
 			pm::types::Team& team);
