@@ -66,7 +66,7 @@ void pm::pl::MainMenu::handle(nanodbc::connection& conn,
 		TeamsManagement::displayTeamsManagement(conn, user);
 		break;
 	case 3:
-		ProjectsManagement::displayProjectsManagement(conn, user);
+		ProjectsManagement::displayProjectsMenu(conn, user);
 		break;
 	case 4:
 		TasksManagement::displayTasksManagement(conn, user);

@@ -40,7 +40,8 @@ void pm::pl::TeamsManagement::displayTeamsManagement(
 	pm::pl::TeamsManagement::handleTeamsDisplay(conn, user, option);
 }
 
-unsigned short pm::pl::TeamsManagement::getTeamToDeleteId(nanodbc::connection& conn, pm::types::User& user)
+unsigned short pm::pl::TeamsManagement::getTeamToDeleteId(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Enter team id to delete: ";
 	unsigned short int option{};
@@ -48,7 +49,8 @@ unsigned short pm::pl::TeamsManagement::getTeamToDeleteId(nanodbc::connection& c
 	return option;
 }
 
-void pm::pl::TeamsManagement::userDeleted(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::userDeleted(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "User unassigned successfully!\n";
 	std::cout << "\nGo back? (y/n)";
@@ -64,7 +66,8 @@ void pm::pl::TeamsManagement::userDeleted(nanodbc::connection& conn, pm::types::
 	}
 }
 
-void pm::pl::TeamsManagement::teamsForUserNotFound(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::teamsForUserNotFound(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Teams for user not found!\n";
 	std::cout << "\nTry again? (y/n)";
@@ -80,7 +83,8 @@ void pm::pl::TeamsManagement::teamsForUserNotFound(nanodbc::connection& conn, pm
 	}
 }
 
-void pm::pl::TeamsManagement::teamsDisplayed(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::teamsDisplayed(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "\n\nGo Back? (y/n): ";
 	char answer{};
@@ -95,7 +99,8 @@ void pm::pl::TeamsManagement::teamsDisplayed(nanodbc::connection& conn, pm::type
 	}
 }
 
-void pm::pl::TeamsManagement::userAssignedToTeam(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::userAssignedToTeam(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "User assigned successfully!\n";
 	std::cout << "View all teams? (y/n)\n";
@@ -112,7 +117,8 @@ void pm::pl::TeamsManagement::userAssignedToTeam(nanodbc::connection& conn, pm::
 	}
 }
 
-void pm::pl::TeamsManagement::teamDeletedSuccessfully(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::teamDeletedSuccessfully(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Team deleted successfully!\n";
 	std::cout << "Manage Teams? (y/n)\n";
@@ -159,7 +165,8 @@ void pm::pl::TeamsManagement::displayTeams(nanodbc::connection& connection, pm::
 	std::cout << table << std::endl;
 }
 
-void pm::pl::TeamsManagement::displayTeamCreatedMenu(nanodbc::connection& conn, pm::types::User& user)
+void pm::pl::TeamsManagement::displayTeamCreatedMenu(
+	nanodbc::connection& conn, pm::types::User& user)
 {
 	std::cout << "Team created successfully!\n";
 	std::cout << "Manage Teams? (y/n)\n";
@@ -255,10 +262,13 @@ void pm::pl::TeamsManagement::handleTeamsView(
 	}
 }
 
-int pm::pl::TeamsManagement::getUserId(nanodbc::connection& conn, pm::types::User& user, std::vector<types::User>& users)
+int pm::pl::TeamsManagement::getUserId(
+	nanodbc::connection& conn, pm::types::User& user,
+	std::vector<types::User>& users)
 {
 	system("cls");
-	pm::pl::AdminsManagement::displayUsers(conn, user, users);
+	pm::pl::AdminsManagement::displayUsers(
+		conn, user, users);
 
 	std::cout << "\n\nEnter user id: ";
 	unsigned short int option{};
@@ -266,11 +276,13 @@ int pm::pl::TeamsManagement::getUserId(nanodbc::connection& conn, pm::types::Use
 	return option;
 }
 
-int pm::pl::TeamsManagement::getTeamId(nanodbc::connection& conn, pm::types::User& user,
+int pm::pl::TeamsManagement::getTeamId(
+	nanodbc::connection& conn, pm::types::User& user,
 	std::vector<types::Team>& teams)
 {
 	system("cls");
-	pm::pl::TeamsManagement::displayTeams(conn, user, teams);
+	pm::pl::TeamsManagement::displayTeams(
+		conn, user, teams);
 
 	std::cout << "\n\nEnter team id: ";
 	unsigned short int option{};

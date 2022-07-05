@@ -1,6 +1,6 @@
 #include "ProjectsManagement.h"
 
-void pm::pl::ProjectsManagement::displayProjectsManagement(
+void pm::pl::ProjectsManagement::displayProjectsMenu(
 	nanodbc::connection& conn, pm::types::User& user)
 {
 	system("cls");
@@ -12,23 +12,150 @@ void pm::pl::ProjectsManagement::displayProjectsManagement(
 
 	unsigned short int option{};
 	std::cin >> option;
-	handleProjectsManagement(conn, user, option);
+	handleProjectsMenu(conn, user, option);
 }
 
-void pm::pl::ProjectsManagement::handleProjectsManagement(
+pm::types::Project pm::pl::ProjectsManagement::getProject(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	system("cls");
+	std::cin.get();
+	std::string title{};
+	std::string description{};
+	size_t idOfCreator = user.id;
+	size_t idOfLastChanger = user.id;
+
+	std::cout << "Create project!\n";
+	std::cout << "Enter title: ";
+	getline(std::cin, title);
+	std::cout << "\nEnter description: ";
+	getline(std::cin, description);
+
+	pm::types::Project project(
+		title, description, idOfCreator, idOfLastChanger);
+
+	return project;
+}
+
+void pm::pl::ProjectsManagement::projectCreated(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Project created successfully!\n";
+	std::cout << "Manage Project? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+
+	if (answer == 'y')
+	{
+		pm::pl::ProjectsManagement::displayProjectsManagement(conn, user);
+	}
+	else
+	{
+		pm::pl::ProjectsManagement::displayProjectsMenu(conn, user);
+	}
+}
+
+void pm::pl::ProjectsManagement::displayProjectsManagement(
+	nanodbc::connection& conn, pm::types::User& user)
+{
+	system("cls");
+	std::cout << "Projects management!\n";
+
+	std::cout << "1. Display all Projects\n";
+	std::cout << "2. Edit Project Title\n";
+	std::cout << "3. Edit Project Description\n";
+	std::cout << "4. Assign Teams\n";
+	std::cout << "5. Unassign Teams\n";
+	std::cout << "6. Back\n\nOption: ";
+
+	unsigned short int option{};
+	std::cin >> option;
+	pm::pl::ProjectsManagement::handleProjectsManagement(conn, user, option);
+}
+
+void pm::pl::ProjectsManagement::handleProjectsManagement(nanodbc::connection& conn, pm::types::User& user,
+	unsigned short option)
+{
+	switch (option)
+	{
+	case 1: pm::bll::ProjectManager::displayAllProjects(conn, user);
+		break;
+	case 2: pm::bll::ProjectManager::editProjectTitle(conn, user);
+		break;
+	case 3: pm::bll::ProjectManager::editProjectDescription(conn, user);
+		break;
+	case 4: pm::bll::ProjectManager::assignTeam(conn, user);
+		break;
+	case 5: pm::bll::ProjectManager::unassignTeam(conn, user);
+		break;
+	case 6: displayProjectsMenu(conn, user);
+		break;
+	default: std::cerr << "Invalid input!" << std::endl;
+	}
+}
+
+void pm::pl::ProjectsManagement::displayProjects(
+	nanodbc::connection& conn, pm::types::User& user,
+	std::vector<pm::types::Project>& projects)
+{
+	system("cls");
+	tabulate::Table table;
+	table.add_row({ "ID", "Title", "Description",
+		"Created On" , "Created By", "Last Changed On",
+		"Last Changed By" });
+	for (const auto& element : projects)
+	{
+		char createdOn[26];
+		char lastChange[26];
+		ctime_s(createdOn, sizeof createdOn,
+			&element.createdOn);
+		ctime_s(lastChange, sizeof lastChange,
+			&element.lastChanged);
+
+		table.add_row({
+			std::to_string(element.id), element.title,
+			element.description, createdOn,
+			std::to_string(element.idOfCreator), lastChange,
+			std::to_string(element.idOfLastChanger) });
+	}
+	for (size_t i = 0; i < 7; ++i) {
+		table[0][i].format()
+			.font_color(tabulate::Color::magenta)
+			.font_align(tabulate::FontAlign::center)
+			.font_style({ tabulate::FontStyle::bold });
+	}
+	std::cout << table << std::endl;
+}
+
+void pm::pl::ProjectsManagement::projectsDisplayed(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Go back? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+
+	if (answer == 'y')
+	{
+		displayProjectsManagement(conn, user);
+	}
+	else
+	{
+		displayProjectsMenu(conn, user);
+	}
+}
+
+void pm::pl::ProjectsManagement::handleProjectsMenu(
 	nanodbc::connection& conn, pm::types::User& user,
 	unsigned short int option)
 {
 	switch (option)
 	{
 	case 1:
-		//createProject(conn, user);
+		pm::bll::ProjectManager::createProject(conn, user);
 		break;
 	case 2:
-		//deleteProject(conn, user);
+		pm::bll::ProjectManager::deleteProject(conn, user);
 		break;
 	case 3:
-		//manageProjects(conn, user);
+		displayProjectsManagement(conn, user);
 		break;
 	case 4:
 		pm::pl::MainMenu::displayAdminMenu(conn, user);
