@@ -10,6 +10,9 @@ namespace pm::dal
 {
 	namespace TeamStore
 	{
+		void getTeamsById(nanodbc::connection& conn,
+		                  pm::types::User user, size_t teamId,
+		                  std::vector<pm::types::Team>& teams);
 		void registerTeam(
 			nanodbc::connection& conn, pm::types::User& user,
 			pm::types::Team& team);
@@ -19,5 +22,7 @@ namespace pm::dal
 			unsigned short int option);
 		void assignUser(nanodbc::connection& conn, pm::types::User& user,
 			size_t& userId, size_t& teamId);
+		std::vector<pm::types::Team> getTeamsOfUser(
+			nanodbc::connection& conn, pm::types::User& user, size_t option);
 	}
 }

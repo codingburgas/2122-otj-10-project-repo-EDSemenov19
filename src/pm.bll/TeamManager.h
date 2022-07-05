@@ -11,6 +11,8 @@ namespace pm::bll
 {
 	namespace TeamManager
 	{
+		void teamsForUserNotFound(
+			nanodbc::connection& conn, pm::types::User& user);
 		void userAssignedToTeam(
 			nanodbc::connection& conn, pm::types::User& user);
 		void teamDeletedSuccessfully(

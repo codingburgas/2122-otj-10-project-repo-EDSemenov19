@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "TeamManager.h"
 
+void pm::bll::TeamManager::teamsForUserNotFound(nanodbc::connection& conn, pm::types::User& user)
+{
+	pm::pl::TeamsManagement::teamsForUserNotFound(conn, user);
+}
+
 void pm::bll::TeamManager::userAssignedToTeam(nanodbc::connection& conn, pm::types::User& user)
 {
 	pm::pl::TeamsManagement::userAssignedToTeam(conn, user);
@@ -50,6 +55,18 @@ void pm::bll::TeamManager::displayAllteams(nanodbc::connection& conn, pm::types:
 
 void pm::bll::TeamManager::displayTeamsOfUser(nanodbc::connection& conn, pm::types::User& user)
 {
+	std::vector<pm::types::User> users =
+		pm::dal::UserStore::getAllUsers(conn, user);
+	size_t userId =
+		pm::pl::TeamsManagement::getUserId(conn, user, users);
+
+	std::vector<pm::types::Team> teams = 
+		pm::dal::TeamStore::getTeamsOfUser(conn, user, userId);
+
+	pm::pl::TeamsManagement::displayTeams(
+		conn, user, teams);
+
+	pm::pl::TeamsManagement::teamsDisplayed(conn, user);
 }
 
 void pm::bll::TeamManager::displayTeamsOfProject(nanodbc::connection& conn, pm::types::User& user)
