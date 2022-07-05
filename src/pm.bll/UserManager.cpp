@@ -75,7 +75,7 @@ pm::types::User pm::bll::UserManager::loginUser(
 	if (pm::bll::UserManager::checkForNoUsers(conn)
 		&& username == "admin" && password == "adminpass")
 	{
-		return pm::types::User(0,"admin", "admin",
+		return pm::types::User(0, "admin", "admin",
 			"adminadmin", "admin@pm.com", 0,
 			"adminpass", true);
 	}

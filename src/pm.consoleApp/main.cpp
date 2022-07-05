@@ -8,6 +8,7 @@
 #include "../../lib/nanodbc/nanodbc.h"
 #include "login.h"
 
+
 /*void listRegisteredUsers()
 {
 	auto users = userManager.getRegisteredUsers();
@@ -27,7 +28,8 @@ int main() try
 	Driver={ODBC Driver 17 for SQL Server};
 	Server=PCBURGAS;
 	Database=PMDB;
-	Trusted_Connection=yes;")"); // an ODBC connection string to your database
+	Trusted_Connection=yes;
+	MARS_Connection=Yes)"); // an ODBC connection string to your database
 	nanodbc::connection conn(connstr);
 
 	app.run(conn);

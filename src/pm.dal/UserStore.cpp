@@ -34,7 +34,7 @@ void pm::dal::UserStore::getUsersToView(nanodbc::connection& conn, pm::types::Us
 }
 
 
-time_t getTime(nanodbc::timestamp& ts1)
+time_t pm::dal::UserStore::getTime(nanodbc::timestamp& ts1)
 {
 	tm time{};
 	time.tm_year = ts1.year - 1900;

@@ -10,24 +10,39 @@
 
 namespace pm::pl
 {
-	struct TeamsManagement
+	namespace TeamsManagement
 	{
-		static pm::types::Team getTeam();
-		static void displayTeamsOfUser(
+		unsigned short int getTeamToDeleteId(nanodbc::connection& conn,
+			pm::types::User& user);
+		void teamsDisplayed(
 			nanodbc::connection& conn, pm::types::User& user);
-		static void displayTeamsOfProject(
+		void userAssignedToTeam(
 			nanodbc::connection& conn, pm::types::User& user);
-		static void handleTeamsDisplay(
+		void teamDeletedSuccessfully(
+		nanodbc::connection& conn, pm::types::User& user);
+		void displayTeams(nanodbc::connection& connection,
+			pm::types::User& user, std::vector<pm::types::Team>& teams);
+		void displayTeamCreatedMenu(
+			nanodbc::connection& conn, pm::types::User& user);
+		pm::types::Team getTeam(nanodbc::connection& conn,
+			pm::types::User& user);
+		void displayTeamsOfUser(
+			nanodbc::connection& conn, pm::types::User& user);
+		void displayTeamsOfProject(
+			nanodbc::connection& conn, pm::types::User& user);
+		void handleTeamsDisplay(
 			nanodbc::connection& conn, pm::types::User& user,
 			unsigned short int option);
-		static void displayAllteams(
+		void displayAllteams(
 			nanodbc::connection& conn, pm::types::User& user);
-		static void displayTeamsView(
+		void displayTeamsView(
 			nanodbc::connection& conn, pm::types::User& user);
-		static void displayTeamsManagement(
+		void displayTeamsManagement(
 			nanodbc::connection& conn, pm::types::User user);
-		static void handleTeamsView(
+		void handleTeamsView(
 			nanodbc::connection& conn, pm::types::User& user,
 			unsigned short option);
+		int getUserId(nanodbc::connection& conn, pm::types::User& user, std::vector<types::User>& users);
+		int getTeamId(nanodbc::connection& conn, pm::types::User& user, std::vector<types::Team>& teams);
 	};
 }

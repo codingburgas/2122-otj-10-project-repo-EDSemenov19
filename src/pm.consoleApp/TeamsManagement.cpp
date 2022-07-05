@@ -14,7 +14,9 @@ void pm::pl::TeamsManagement::displayTeamsView(nanodbc::connection& conn,
 	std::cout << "1. Display all teams\n";
 	std::cout << "2. Display teams of a user\n";
 	std::cout << "3. Display teams of a project\n";
-	std::cout << "4. Back\n";
+	std::cout << "4. Assign User\n";
+	std::cout << "5. Unassign User\n";
+	std::cout << "6. Back\n\nOption: ";
 
 	unsigned short int option{};
 	std::cin >> option;
@@ -30,7 +32,7 @@ void pm::pl::TeamsManagement::displayTeamsManagement(
 	std::cout << "1. Create team\n";
 	std::cout << "2. Delete team\n";
 	std::cout << "3. Manage teams\n";
-	std::cout << "4. Back\n";
+	std::cout << "4. Back\n\nOption: ";
 
 	unsigned short int option{};
 	std::cin >> option;
@@ -38,17 +40,123 @@ void pm::pl::TeamsManagement::displayTeamsManagement(
 	pm::pl::TeamsManagement::handleTeamsDisplay(conn, user, option);
 }
 
-pm::types::Team pm::pl::TeamsManagement::getTeam()
+unsigned short pm::pl::TeamsManagement::getTeamToDeleteId(nanodbc::connection& conn, pm::types::User& user)
 {
+	std::cout << "Enter team id to delete: ";
+	unsigned short int option{};
+	std::cin >> option;
+	return option;
+}
+
+void pm::pl::TeamsManagement::teamsDisplayed(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "\n\nGo Back? (y/n): ";
+	char answer{};
+	std::cin >> answer;
+	if (answer == 'y')
+	{
+		pm::pl::TeamsManagement::displayTeamsView(conn, user);
+	}
+	else
+	{
+		exit(0);
+	}
+}
+
+void pm::pl::TeamsManagement::userAssignedToTeam(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "User assigned successfully!\n";
+	std::cout << "View all teams? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+
+	if (answer == 'y')
+	{
+		pm::bll::TeamManager::displayAllteams(conn, user);
+	}
+	else
+	{
+		pm::pl::TeamsManagement::displayTeamsManagement(conn, user);
+	}
+}
+
+void pm::pl::TeamsManagement::teamDeletedSuccessfully(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Team deleted successfully!\n";
+	std::cout << "Manage Teams? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+
+	if (answer == 'y')
+	{
+		pm::pl::TeamsManagement::displayTeamsView(conn, user);
+	}
+	else
+	{
+		pm::pl::TeamsManagement::displayTeamsManagement(conn, user);
+	}
+}
+
+void pm::pl::TeamsManagement::displayTeams(nanodbc::connection& connection, pm::types::User& user,
+	std::vector<pm::types::Team>& teams)
+{
+	system("cls");
+	tabulate::Table table;
+	table.add_row({ "ID", "Team Name", "Created On",
+		"Created By" , "Last Changed On", "Last Changed By" });
+	for (const auto& element : teams)
+	{
+		char createdOn[26];
+		char lastChange[26];
+		ctime_s(createdOn, sizeof createdOn,
+			&element.createdOn);
+		ctime_s(lastChange, sizeof lastChange,
+			&element.lastChange);
+
+		table.add_row({
+			std::to_string(element.id), element.title,
+			createdOn, std::to_string(element.creatorId),
+			lastChange, std::to_string(element.lastChangerId) });
+	}
+	for (size_t i = 0; i < 6; ++i) {
+		table[0][i].format()
+			.font_color(tabulate::Color::magenta)
+			.font_align(tabulate::FontAlign::center)
+			.font_style({ tabulate::FontStyle::bold });
+	}
+	std::cout << table << std::endl;
+}
+
+void pm::pl::TeamsManagement::displayTeamCreatedMenu(nanodbc::connection& conn, pm::types::User& user)
+{
+	std::cout << "Team created successfully!\n";
+	std::cout << "Manage Teams? (y/n)\n";
+	char answer{};
+	std::cin >> answer;
+
+	if (answer == 'y')
+	{
+		pm::pl::TeamsManagement::displayTeamsView(conn, user);
+	}
+	else
+	{
+		pm::pl::TeamsManagement::displayTeamsManagement(conn, user);
+	}
+}
+
+pm::types::Team pm::pl::TeamsManagement::getTeam(nanodbc::connection& conn,
+	pm::types::User& user)
+{
+	std::cin.get();
 	std::string title{};
-	std::string description{};
+	size_t creatorId{};
+	creatorId = user.id;
 
 	std::cout << "Please enter team title: ";
 	getline(std::cin, title);
-	std::cout << "\n Please enter team description: ";
-	getline(std::cin, description);
 
-	pm::types::Team team{ title, description };
+	pm::types::Team team{
+		title, creatorId };
 	return team;
 }
 
@@ -96,16 +204,44 @@ void pm::pl::TeamsManagement::handleTeamsView(
 	switch (option)
 	{
 	case 1: // Display all teams
-		pm::pl::TeamsManagement::displayAllteams(conn, user);
+		pm::bll::TeamManager::displayAllteams(conn, user);
 		break;
 	case 2: // Display teams of a user
-		pm::pl::TeamsManagement::displayTeamsOfUser(conn, user);
+		pm::bll::TeamManager::displayTeamsOfUser(conn, user);
 		break;
 	case 3: // Display teams of a project
-		pm::pl::TeamsManagement::displayTeamsOfProject(conn, user);
+		pm::bll::TeamManager::displayTeamsOfProject(conn, user);
 		break;
-	case 4: // Back
+	case 4: // Assign Users
+		pm::bll::TeamManager::assignUser(conn, user);
+	case 5: // Unassign Users from team
+		pm::bll::TeamManager::unassignUser(conn, user);
+		break;
+	case 6: // Back
 		pm::pl::TeamsManagement::displayTeamsManagement(conn, user);
 		break;
 	}
+}
+
+int pm::pl::TeamsManagement::getUserId(nanodbc::connection& conn, pm::types::User& user, std::vector<types::User>& users)
+{
+	system("cls");
+	pm::pl::AdminsManagement::displayUsers(conn, user, users);
+
+	std::cout << "\n\nEnter user id: ";
+	unsigned short int option{};
+	std::cin >> option;
+	return option;
+}
+
+int pm::pl::TeamsManagement::getTeamId(nanodbc::connection& conn, pm::types::User& user,
+	std::vector<types::Team>& teams)
+{
+	system("cls");
+	pm::pl::TeamsManagement::displayTeams(conn, user, teams);
+
+	std::cout << "\n\nEnter team id: ";
+	unsigned short int option{};
+	std::cin >> option;
+	return option;
 }

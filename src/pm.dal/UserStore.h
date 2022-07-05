@@ -10,6 +10,8 @@ namespace pm::dal
 
 	namespace UserStore
 	{
+		time_t getTime(nanodbc::timestamp& ts1);
+
 		void create(
 			nanodbc::connection& conn, pm::types::User& user,
 			pm::types::User& newUser);
