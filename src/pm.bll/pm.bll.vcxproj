@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProjectManager.h" />
+    <ClInclude Include="TaskManager.h" />
     <ClInclude Include="TeamManager.h" />
     <ClInclude Include="UserManager.h" />
   </ItemGroup>
@@ -179,6 +180,7 @@
     </ClCompile>
     <ClCompile Include="pm.bll.cpp" />
     <ClCompile Include="ProjectManager.cpp" />
+    <ClCompile Include="TaskManager.cpp" />
     <ClCompile Include="TeamManager.cpp" />
     <ClCompile Include="UserManager.cpp" />
   </ItemGroup>

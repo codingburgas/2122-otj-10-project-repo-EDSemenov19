@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProjectStore.h" />
+    <ClInclude Include="TaskStore.h" />
     <ClInclude Include="TeamStore.h" />
     <ClInclude Include="UserStore.h" />
   </ItemGroup>
@@ -181,6 +182,7 @@
     </ClCompile>
     <ClCompile Include="pm.dal.cpp" />
     <ClCompile Include="ProjectStore.cpp" />
+    <ClCompile Include="TaskStore.cpp" />
     <ClCompile Include="TeamStore.cpp" />
     <ClCompile Include="UserStore.cpp" />
   </ItemGroup>
